@@ -146,6 +146,7 @@
     <ClInclude Include="Command_manager.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="Randomized_class.h" />
     <ClInclude Include="Seats.h" />
     <ClInclude Include="Ticket.h" />

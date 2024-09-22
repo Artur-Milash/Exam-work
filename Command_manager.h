@@ -11,6 +11,7 @@
 #include <fstream>
 #include "Log.h"
 #include "Admin_config.h"
+#include "Logger.h"
 
 using pair = std::pair<std::string, std::string>;
 using pair_int = std::pair<int, int>;
@@ -18,7 +19,7 @@ using namespace std::literals::chrono_literals;
 using pos_type = unsigned long long;
 
 namespace command_manager {
-	class Command {
+	class Command : public Logger {
 	private:
 		Database<Admin_config> admin_config{ "Admin_config.txt", 1 };
 
@@ -64,6 +65,7 @@ namespace command_manager {
 		static void time_checker(Command*);
 		static void updater(Command*);
 
+		const std::string get_message(const unsigned int&) const override;
 		//add copy and move constructors
 
 		std::unordered_map<std::string, void(*)(Command*)> map;

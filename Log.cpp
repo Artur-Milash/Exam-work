@@ -14,6 +14,7 @@ void Log::release() {
 	delete ptr;
 	ptr = nullptr;
 }
+
 Log* Log::create() {
 	if (ptr == nullptr) {
 		std::filesystem::create_directory("Logs");
@@ -24,6 +25,7 @@ Log* Log::create() {
 	}
 	return ptr;
 }
+
 void Log::save(const std::string& msg) {
 	std::mutex mutex;
 	std::lock_guard<std::mutex> lock(mutex);
@@ -31,4 +33,13 @@ void Log::save(const std::string& msg) {
 	file << std::format("{:%X}", std::chrono::current_zone()
 		->to_local(std::chrono::system_clock::now()))
 		<< " || " << msg << std::endl;
+}
+
+void Log::save(const Logger* obj, const unsigned int& msg) {
+	std::mutex mutex;
+	std::lock_guard<std::mutex> lock(mutex);
+	std::ofstream file(*str_ptr, std::ios::app);
+	file << std::format("{:%X}", std::chrono::current_zone()
+		->to_local(std::chrono::system_clock::now()))
+		<< " || " << obj->get_function_name() << " | " << obj->get_message(msg) << std::endl;
 }

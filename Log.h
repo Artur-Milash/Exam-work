@@ -4,6 +4,7 @@
 #include "fstream"
 #include <filesystem>
 #include <mutex>
+#include "Logger.h"
 
 class Log
 {
@@ -20,4 +21,5 @@ public:
 	static void release();
 	static Log* create();
 	void save(const std::string&);
+	void save(const Logger*, const unsigned int&);
 };

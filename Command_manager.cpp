@@ -14,6 +14,7 @@ void command_manager::Command::cleaner(std::string& str) {
 }
 
 void command_manager::Command::help_func(Command* obj) {
+	obj->set_function_name("help_func");
 	std::cout << "\nCommand list:\n"
 		<< "help - print command list\n"
 		<< "guide - guide\n"
@@ -48,7 +49,8 @@ void command_manager::Command::help_func(Command* obj) {
 			<< "\tDo not use, if you don't know what you do\n"
 			<< "leave admin - leave admin rights\n";
 	}
-	obj->log->save("(help_func) was successfully executed");
+	//obj->log->save("(help_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::exit_func(Command* obj) {
 	obj->exit = 1;
@@ -1202,6 +1204,25 @@ const void command_manager::Command::operator>>(std::string& str) {
 		throw std::runtime_error("\nUnknown command\nSee 'help' for more information");
 	}
 
+}
+
+const std::string command_manager::Command::get_message(const unsigned int& msg) const {
+	switch (msg) {
+	case 0:
+		return "success";
+	case 1:
+		return "missed syntax";
+	case 2:
+		return "missed value";
+	case 3:
+		return "client not found";
+	case 4:
+		return "bus not found";
+	case 5:
+		return "seat not found";
+	default:
+		return "undefined message";
+	}
 }
 
 bool command_manager::Command::end() const { return this->exit; }
