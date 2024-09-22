@@ -49,22 +49,26 @@ void command_manager::Command::help_func(Command* obj) {
 			<< "\tDo not use, if you don't know what you do\n"
 			<< "leave admin - leave admin rights\n";
 	}
-	//obj->log->save("(help_func) was successfully executed");
 	obj->log->save(obj, 0);
 }
 void command_manager::Command::exit_func(Command* obj) {
+	obj->set_function_name("exit_func");
 	obj->exit = 1;
-	obj->log->save("(exit_func) was successfully executed");
+	
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::clear_func(Command* obj) {
+	obj->set_function_name("clear_func");
 #ifdef _WIN32
 	system("cls");
 #else
 	system("clear");
 #endif 
-	obj->log->save("(clear_func) was successfully executed");
+	
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::guide_func(Command* obj) {
+	obj->set_function_name("guide_func");
 	std::cout << "\nCommand list queue for user:\n"
 		<< "If you need to start up the project use 'admin add bus (properties)' command with admin rights\n"
 		<< "1. use 'find bus (keys)' command to find bus with keys (for example: (key1, .... , keyN))\n"
@@ -73,20 +77,23 @@ void command_manager::Command::guide_func(Command* obj) {
 		<< "4. use 'delete client (name_surname) to delete user\n"
 		<< "\tAny other command is optional\n"
 		<< "See 'help' for more information\n";
-	obj->log->save("(guide_func) was successfully executed");
+	
+	obj->log->save(obj, 0);
 }
 
 void command_manager::Command::admin_update_func(Command* obj) {
+	obj->set_function_name("admin_update_func");
 	if (!obj->admin) {
-		obj->log->save("error (admin_update_func): user didn`t have admin rights");
+		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
 	obj->bus_base.update();
 	obj->client_base.update();
 	obj->seats_base.update();
-	obj->log->save("(admin_update_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::admin_func(std::string& str, Command* obj) {
+	obj->set_function_name("admin_func");
 	if (obj->admin) {
 		obj->log->save("error (admin_func): user already have admin rights");
 		throw std::runtime_error("\nYou are already an admin");
@@ -100,11 +107,12 @@ void command_manager::Command::admin_func(std::string& str, Command* obj) {
 		std::cout << "\nInvalid password\n";
 		obj->log->save("fail (admin_func): invalid password");
 	}
-	obj->log->save("(admin_func) was successfuly executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj) {
+	obj->set_function_name("admin_add_bus_func");
 	if (!obj->admin) {
-		obj->log->save("error (admin_add_bus_func): user didn`t have admin rights");
+		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
 	Bus bus;
@@ -113,12 +121,12 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 
 	std::size_t size = str.find(":");
 	if (size == std::string::npos) {
-		obj->log->save("error (admin_add_bus_func): invalid departure syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nInvalid departure syntax\nSee 'help' for more information");
 	}
 	std::string buff_str = str.substr(0, size);
 	if (buff_str.empty()) {
-		obj->log->save("error (admin_add_bus_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
@@ -126,17 +134,17 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (admin_add_bus_func): invalid departure syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nInvalid departure syntax\nSee 'help' for more information");
 	}
 	std::string buff_min = str.substr(0, size);
 	if (buff_min.empty()) {
-		obj->log->save("error (admin_add_bus_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
 	if (std::stoi(buff_str, 0) >= 24 || std::stoi(buff_min, 0) >= 60) {
-		obj->log->save("error (admin_add_bus_func): invalid departure value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nInvalid departure value\nSee 'help' for more information");
 	}
 
@@ -145,29 +153,29 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 	//
 	size = str.find(":");
 	if (size == std::string::npos) {
-		obj->log->save("error (admin_add_bus_func): invalid arrival syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nInvalid arrival syntax\nSee 'help' for more information");
 	}
 	buff_str = str.substr(0, size);
 	if (buff_str.empty()) {
-		obj->log->save("error (admin_add_bus_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 	str = str.substr(size + 1, std::string::npos);
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (admin_add_bus_func): invalid arrival syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nInvalid arrival syntax\nSee 'help' for more information");
 	}
 	buff_min = str.substr(0, size);
 	if (buff_min.empty()) {
-		obj->log->save("error (admin_add_bus_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
 	if (std::stoi(buff_str, 0) >= 24 || std::stoi(buff_min, 0) >= 60) {
-		obj->log->save("error (admin_add_bus_func): invalid arrival value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nInvalid arrival value\nSee 'help' for more information");
 	}
 
@@ -176,11 +184,11 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (admin_add_bus_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	if (str.substr(0, size).empty()) {
-		obj->log->save("error (admin_add_bus_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 	bus.set_max_seats(std::stoi(str, &size));
@@ -188,11 +196,11 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (admin_add_bus_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	if (str.substr(0, size).empty()) {
-		obj->log->save("error (admin_add_bus_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 	bus.set_cost(std::stoi(str, &size));
@@ -200,11 +208,11 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (admin_add_bus_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	if (str.substr(0, size).empty()) {
-		obj->log->save("error (admin_add_bus_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
@@ -216,7 +224,7 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 	bus.set_max_benefit_seats(std::stoi(str, &size));
 	str = str.substr(size + 1, std::string::npos);
 	if (str.empty()) {
-		obj->log->save("error (admin_add_bus_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
@@ -230,11 +238,12 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 	bus.generate(6);
 	obj->bus_base.put(obj->bus_base.size() + 1, bus);
 	obj->bus_base.update();
-	obj->log->save("(admin_update_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::admin_delete_bus_func(std::string& str, Command* obj) {
+	obj->set_function_name("admin_delete_bus_func");
 	if (!obj->admin) {
-		obj->log->save("error (admin_delete_bus_func): user didn`t have admin rights");
+		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
 	std::size_t buff_size = str.find_first_not_of("0123456789");
@@ -246,7 +255,7 @@ void command_manager::Command::admin_delete_bus_func(std::string& str, Command* 
 	unsigned int buff = std::stoi(str, &buff_size);
 	auto result = obj->bus_base.find(buff);
 	if (result.empty()) {
-		obj->log->save("error (admin_delete_bus_func): no bus found");
+		obj->log->save(obj, 4);
 		throw std::runtime_error("\nThere isn't any bus with such id");
 	}
 	auto find_result = obj->seats_base.find(buff);
@@ -262,37 +271,40 @@ void command_manager::Command::admin_delete_bus_func(std::string& str, Command* 
 			throw std::runtime_error("\nThe clients are still in database");
 		}
 	}
-	obj->log->save("(admin_delete_bus_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::leave_admin_func(Command* obj) {
+	obj->set_function_name("leave_admin_func");
 	if (!obj->admin) {
-		obj->log->save("error (leave_admin_func): user didn`t have admin rights");
+		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
 	obj->admin = 0;
 	clear_func(obj);
-	obj->log->save("(leave_admin_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::admin_change_password_func(std::string& str, Command* obj) {
+	obj->set_function_name("admin_change_password");
 	if (!obj->admin) {
-		obj->log->save("error (admin_change_password_func): user didn`t have admin rights");
+		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
 	obj->password = str;
 	obj->admin_config.get_ptr(0)->set_password(str);
 	obj->admin_config.update();
-	obj->log->save("(admin_change_password_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 
 void command_manager::Command::admin_resize_bus_database_func(std::string& str, Command* obj) {
+	obj->set_function_name("admin_resize_bus_database_func");
 	if (!obj->admin) {
-		obj->log->save("error (admin_resize_bus_database_func): user didn`t have admin rights");
+		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
 
 	std::size_t size = str.find_first_not_of("1234567890");
 	if (size != std::string::npos) {
-		obj->log->save("error (admin_resize_bus_database_func): invalid input");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid input");
 	}
 
@@ -300,17 +312,18 @@ void command_manager::Command::admin_resize_bus_database_func(std::string& str, 
 	obj->admin_config.update();
 	obj->bus_base.resize(obj->admin_config.get(0).get_bus());
 
-	obj->log->save("(admin_resize_bus_database_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::admin_resize_client_database_func(std::string& str, Command* obj) {
+	obj->set_function_name("admin_resize_client_database_func");
 	if (!obj->admin) {
-		obj->log->save("error (admin_resize_client_database_func): user didn`t have admin rights");
+		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
 
 	std::size_t size = str.find_first_not_of("1234567890");
 	if (size != std::string::npos) {
-		obj->log->save("error (admin_resize_client_database_func): invalid input");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid input");
 	}
 
@@ -318,17 +331,18 @@ void command_manager::Command::admin_resize_client_database_func(std::string& st
 	obj->admin_config.update();
 	obj->client_base.resize(obj->admin_config.get(0).get_client());
 
-	obj->log->save("(admin_resize_client_database_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::admin_resize_seats_database_func(std::string& str, Command* obj) {
+	obj->set_function_name("admin_resize_seats_database_func");
 	if (!obj->admin) {
-		obj->log->save("error (admin_resize_seats_database_func): user didn`t have admin rights");
+		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
 
 	std::size_t size = str.find_first_not_of("1234567890");
 	if (size != std::string::npos) {
-		obj->log->save("error (admin_resize_seats_database_func): invalid input");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid input");
 	}
 
@@ -336,12 +350,13 @@ void command_manager::Command::admin_resize_seats_database_func(std::string& str
 	obj->admin_config.update();
 	obj->seats_base.resize(obj->admin_config.get(0).get_seats());
 
-	obj->log->save("(admin_resize_seats_database_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 
 void command_manager::Command::show_all_buses_func(Command* obj) {
+	obj->set_function_name("show_all_buses_func");
 	if (obj->bus_base.size() == 0) {
-		obj->log->save("error (show_all_buses_func): no buses in database");
+		obj->log->save(obj, 4);
 		throw std::runtime_error("\nThere isn't any bus in database");
 	}
 	std::cout << "\n";
@@ -349,11 +364,12 @@ void command_manager::Command::show_all_buses_func(Command* obj) {
 		Bus buff = obj->bus_base.get(i);
 		std::cout << buff;
 	}
-	obj->log->save("(show_all_buses_func) was successfully executed");
+	obj->log->save(obj ,0);
 }
 void command_manager::Command::show_all_clients_func(Command* obj) {
+	obj->set_function_name("show_all_clients_func");
 	if (obj->client_base.size() == 0) {
-		obj->log->save("error (show_all_clients): none client was found");
+		obj->log->save(obj, 3);
 		throw std::runtime_error("\nThere isn't any client in database");
 	}
 	unsigned int pos = 0;
@@ -363,11 +379,12 @@ void command_manager::Command::show_all_clients_func(Command* obj) {
 		std::cout << client_buff;
 		pos++;
 	}
-	obj->log->save("(show_all_clients) was successfully executed");
+	obj->log->save(obj ,0);
 }
 void command_manager::Command::show_all_seats_func(Command* obj) {
+	obj->set_function_name("show_all_seats_func");
 	if (obj->seats_base.size() == 0) {
-		obj->log->save("error (show_all_seats_func): none seat was found");
+		obj->log->save(obj, 5);
 		throw std::runtime_error("\nThere isn't any seat in database");
 	}
 	unsigned int pos = 0;
@@ -377,18 +394,20 @@ void command_manager::Command::show_all_seats_func(Command* obj) {
 		std::cout << seat_buff;
 		pos++;
 	}
-	obj->log->save("(show_all_seats_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::show_all_func(Command* obj) {
+	obj->set_function_name("show_all_func");
 	show_all_buses_func(obj);
 	std::cout << "------------------------------------\n";
 	show_all_clients_func(obj);
 	std::cout << "------------------------------------\n";
 	show_all_seats_func(obj);
-	obj->log->save("(show_all_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 
 void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
+	obj->set_function_name("find_bus_func");
 	cleaner(str);
 
 	std::vector<pos_type> result;
@@ -429,7 +448,7 @@ void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
 	else {
 		std::string buff_str = str.substr(0, size);
 		if (buff_str.empty()) {
-			obj->log->save("error (find_bus_func): missed value");
+			obj->log->save(obj, 2);
 			throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 		}
 
@@ -459,7 +478,7 @@ void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
 			size = str.find(",");
 			buff_str = str.substr(0, size);
 			if (buff_str.empty()) {
-				obj->log->save("error (find_bus_func): missed value");
+				obj->log->save(obj ,2);
 				throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 			}
 			std::size_t buff_size = buff_str.find_first_not_of("0123456789");
@@ -490,12 +509,13 @@ void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
 		}
 	}
 	if (result.empty()) {
-		obj->log->save("error (find_bus_func): none bus was found");
+		obj->log->save(obj ,4);
 		throw std::runtime_error("\nNone bus was found");
 	}
-	obj->log->save("(find_bus_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::find_client_func(std::string& str, Command* obj) {
+	obj->set_function_name("find_client_func");
 	std::cout << std::endl;
 	cleaner(str);
 	bool executed = 0;
@@ -523,7 +543,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 			}
 		}
 		if (result.empty()) {
-			obj->log->save("error (find_client_func): none client was found");
+			obj->log->save(obj, 3);
 			throw std::runtime_error("\nNone client was found");
 		}
 		for (int i = 0; i < result.size(); i++) {
@@ -535,7 +555,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 	else {
 		std::string buff_str = str.substr(0, size);
 		if (buff_str.empty()) {
-			obj->log->save("error (find_client_func): missed value");
+			obj->log->save(obj, 2);
 			throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 		}
 
@@ -560,7 +580,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 		str = str.substr(size + 1, std::string::npos);
 
 		if (result.empty()) {
-			obj->log->save("error (find_client_func): none client was found");
+			obj->log->save(obj ,3);
 			throw std::runtime_error("\nNone client was found");
 		}
 
@@ -568,7 +588,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 			size = str.find(",");
 			buff_str = str.substr(0, size);
 			if (buff_str.empty()) {
-				obj->log->save("error (find_client_func): missed value");
+				obj->log->save(obj, 2);
 				throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 			}
 			std::size_t buff_size = buff_str.find_first_not_of("0123456789");
@@ -587,7 +607,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 				}
 			}
 			if (result.empty()) {
-				obj->log->save("error (find_client_func): none client was found");
+				obj->log->save(obj, 2);
 				throw std::runtime_error("\nNone client was found");
 			}
 			if (size != std::string::npos)
@@ -595,7 +615,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 		}
 
 		if (result.empty()) {
-			obj->log->save("error (find_client_func): none client was found");
+			obj->log->save(obj, 2);
 			throw std::runtime_error("\nNone client was found");
 		}
 
@@ -604,13 +624,14 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 			std::cout << buff;
 		}	
 	}
-	obj->log->save("(find_client_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
+	obj->set_function_name("find_seats_func");
 	cleaner(str);
 	std::size_t size = str.find_first_not_of("1234567890.,");
 	if (size != std::string::npos) {
-		obj->log->save("error (find_seats_func): invalid input");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid input\nSee 'help' for more information");
 	}
 	size = str.find(",");
@@ -625,14 +646,14 @@ void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
 			}
 		}
 		else {
-			obj->log->save("error (find_seats_func): none seat was found");
+			obj->log->save(obj, 5);
 			throw std::runtime_error("\nNone was found");
 		}
 	}
 	else {
 		std::string buff_str = str.substr(0, size);
 		if (buff_str.empty()) {
-			obj->log->save("error (find_seats_func): missed value");
+			obj->log->save(obj ,2);
 			throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 		}
 
@@ -645,7 +666,7 @@ void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
 			size = str.find(",");
 			buff_str = str.substr(0, size);
 			if (buff_str.empty()) {
-				obj->log->save("error (find_seats_func): missed value");
+				obj->log->save(obj, 2);
 				throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 			}
 
@@ -654,7 +675,7 @@ void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
 
 			size = str.find(",");
 			if (find_result.empty()) {
-				obj->log->save("error (find_seats_func): none seat was found");
+				obj->log->save(obj, 5);
 				throw std::runtime_error("\nNone was found");
 			}
 			if (size != std::string::npos)
@@ -665,43 +686,44 @@ void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
 			std::cout << seats;
 		}
 	}
-	obj->log->save("(find_seats_func) was successfully executed");
+	obj->log->save(obj ,0);
 }
 void command_manager::Command::calculate_func(std::string& str, Command* obj) {
+	obj->set_function_name("calculate_func");
 	cleaner(str);
 	std::size_t size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (calculate_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 
 	std::string buff_str = str.substr(0, size);
 	if (buff_str.empty()) {
-		obj->log->save("error (calculate_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
 	std::size_t buff_size = buff_str.find_first_not_of("0123456789");
 	if (buff_size != std::string::npos) {
-		obj->log->save("error (calculate_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	unsigned int buff_int = std::stoi(buff_str, &size);
 	auto find_result = obj->bus_base.find(buff_int);
 	if (find_result.empty()) {
-		obj->log->save("error (calculate_func): none bus was found");
+		obj->log->save(obj, 4);
 		throw std::runtime_error("\nThere isn't any bus this such id");
 	}
 	str = str.substr(size + 1, std::string::npos);
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (calculate_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	buff_str = str.substr(0, size);
 	if (buff_str.empty()) {
-		obj->log->save("error (calculate_func): missed value");
+		obj->log->save(obj ,2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
@@ -709,28 +731,29 @@ void command_manager::Command::calculate_func(std::string& str, Command* obj) {
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error(calculate_func): missed_syntax");
+		obj->log->save(obj ,1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	std::string end = str.substr(0, size);
 	str = str.substr(size + 1, std::string::npos);
 	if (str.empty()) {
-		obj->log->save("error (calculate_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
 	size = str.find_first_not_of("01");
 	if (size != std::string::npos) {
-		obj->log->save("error (calculate_func): invalid syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 
 	buff_int = obj->bus_base.get(find_result.at(0)).calculate(buff_str, end, str);
 	std::cout << "\nCost for client: " << buff_int << "\n";
-	obj->log->save("(calculate_func) was successfully executed");
+	obj->log->save(obj ,0);
 }
 
 void command_manager::Command::add_client_func(std::string& str, Command* obj) {
+	obj->set_function_name("add_client_func");
 	cleaner(str);
 	using pair = std::pair<std::string, std::string>;
 	using pair_int = std::pair<int, int>;
@@ -744,26 +767,26 @@ void command_manager::Command::add_client_func(std::string& str, Command* obj) {
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (add_client_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	Client client;
 	std::string buff_str = str.substr(0, size);
 	str = str.substr(size + 1, std::string::npos);
 	if (buff_str.empty()) {
-		obj->log->save("error (add_client_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 	client.set_name(buff_str);
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (add_client_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	buff_str = str.substr(0, size);
 	if (buff_str.empty()) {
-		obj->log->save("error (add_client_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
@@ -771,55 +794,55 @@ void command_manager::Command::add_client_func(std::string& str, Command* obj) {
 	unsigned int buff_int = std::stoi(buff_str, &size);
 	auto find_result = obj->bus_base.find(buff_int);
 	if (find_result.empty()) {
-		obj->log->save("error (add_client_func): invalid bus id");
+		obj->log->save(obj, 4);
 		throw std::runtime_error("\nInvalid bus id");
 	}
 	client.set_bus_id(buff_int);
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save("error (add_client_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	buff_str = str.substr(0, size);
 	if (buff_str.empty()) {
-		obj->log->save("error (add_client_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
 	str = str.substr(size + 1, std::string::npos);
 	size = buff_str.find_first_not_of("01");
 	if (size != std::string::npos) {
-		obj->log->save("error (add_client_func): invalid syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	client.set_benefit(std::stoi(buff_str, &size));
 
 	size = str.find(".");
 	if (size == std::string::npos) {
-		obj->log->save("error (add_client_func): missed syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	buff_str = str.substr(0, size);
 	if (buff_str.empty()) {
-		obj->log->save("error (add_client_func): missed value");
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
 	str = str.substr(size + 1, std::string::npos);
 	size = buff_str.find_first_not_of("1234567890");
 	if (size != std::string::npos) {
-		obj->log->save("error (add_client_func): invalid syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	size = str.find_first_not_of("1234567890");
 	if (size != std::string::npos) {
-		obj->log->save("error (add_client_func): invalid syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	size = std::string::npos;
 	if (std::stoi(buff_str, &size) > 31 || std::stoi(str, &size) > 12) {
-		obj->log->save("error (add_client_func): invalid syntax");
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 
@@ -972,9 +995,10 @@ void command_manager::Command::add_client_func(std::string& str, Command* obj) {
 	}
 
 	std::cout << "\nClient`s ticket: " << client.get_ticket() << "\n";
-	obj->log->save("(add_client_func) successfully executed");
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::delete_client_func(std::string& str, Command* obj) {
+	obj->set_function_name("delete_client_func");
 	cleaner(str);
 
 	pair buff_time;
@@ -983,7 +1007,7 @@ void command_manager::Command::delete_client_func(std::string& str, Command* obj
 
 	auto find_result = obj->client_base.find(str);
 	if (find_result.size() == 0) {
-		obj->log->save("error (delete_client_func): none client was found");
+		obj->log->save(obj, 3);
 		throw std::runtime_error("\nThere isn`t any client with such name");
 	}
 	Client buff_client = obj->client_base.get(find_result.at(0));
@@ -1000,7 +1024,7 @@ void command_manager::Command::delete_client_func(std::string& str, Command* obj
 		Bus buff_bus = obj->bus_base.get(find_result.at(0)).remove_client(buff_client.get_benefit());
 		obj->bus_base.put(find_result.at(0), buff_bus);
 	}
-	obj->log->save("(delete_client_func) was successfully executed");
+	obj->log->save(obj, 0);
 }
 
 void command_manager::Command::time_checker(Command* obj) {
@@ -1220,6 +1244,8 @@ const std::string command_manager::Command::get_message(const unsigned int& msg)
 		return "bus not found";
 	case 5:
 		return "seat not found";
+	case 6:
+		return "user wasn't admin";
 	default:
 		return "undefined message";
 	}

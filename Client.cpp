@@ -22,7 +22,7 @@ std::string Client::get_name() { return name; }
 void Client::set_ticket(unsigned int& new_ticket) { ticket.set(new_ticket); }
 void Client::generate_ticket(unsigned int amount) {
 	ticket.generate(amount);
-	log->save("success (Clietn::generate_ticket)");
+	log->save("success (Client::generate_ticket)");
 }
 unsigned int Client::get_ticket() { return ticket.get(); }
 

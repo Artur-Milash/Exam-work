@@ -43,3 +43,11 @@ void Log::save(const Logger* obj, const unsigned int& msg) {
 		->to_local(std::chrono::system_clock::now()))
 		<< " || " << obj->get_function_name() << " | " << obj->get_message(msg) << std::endl;
 }
+void Log::save(const Logger& obj, const unsigned int& msg) {
+	std::mutex mutex;
+	std::lock_guard<std::mutex> lock(mutex);
+	std::ofstream file(*str_ptr, std::ios::app);
+	file << std::format("{:%X}", std::chrono::current_zone()
+		->to_local(std::chrono::system_clock::now()))
+		<< " || " << obj.get_function_name() << " | " << obj.get_message(msg) << std::endl;
+}
