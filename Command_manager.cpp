@@ -1230,7 +1230,7 @@ const void command_manager::Command::operator>>(std::string& str) {
 
 }
 
-const std::string command_manager::Command::get_message(const unsigned int& msg) const {
+const std::string command_manager::Command::get_message(const unsigned int msg) const {
 	switch (msg) {
 	case 0:
 		return "success";

@@ -400,3 +400,6 @@ FodyWeavers.xsd
 Logs/
 
 *.txt
+/Seats_database.txt
+/Client_database.txt
+/Bus_database.txt

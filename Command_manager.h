@@ -65,7 +65,7 @@ namespace command_manager {
 		static void time_checker(Command*);
 		static void updater(Command*);
 
-		const std::string get_message(const unsigned int&) const override;
+		const std::string get_message(const unsigned int) const override;
 		//add copy and move constructors
 
 		std::unordered_map<std::string, void(*)(Command*)> map;

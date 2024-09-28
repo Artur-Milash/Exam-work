@@ -8,11 +8,10 @@
 #include <fstream>
 #include <mutex>
 #include <thread>
-#include <stdio.h>
 #include <string>
 #include <vector>
-#include <stdio.h>
 #include "Log.h"
+#include <stdio.h>
 
 template <typename T>
 class Database
