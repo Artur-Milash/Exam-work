@@ -2,6 +2,7 @@
 #include <string>
 #include "Command_manager.h"
 #include "Log.h"
+#include "Colors.hpp"
 
 int main()
 {
@@ -15,9 +16,9 @@ int main()
 			command >> str;
 		}
 		catch (std::runtime_error& ex) {
-			std::cout << ex.what() << std::endl;
+			std::cout << red << ex.what() << std::endl;
 		}
-		std::cout << "------------------------------------\n";
+		std::cout << white <<"------------------------------------\n";
 	} while (!command.end());
 	std::cout << "Program has ended\n"
 	<< "------------------------------------\n";

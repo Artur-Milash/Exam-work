@@ -107,8 +107,8 @@ const bool Seats::operator==(const std::string data) const {
 }
 
 std::ostream& operator<<(std::ostream& os, Seats& obj) {
-	os << "Date: " << obj.date.first << "." << obj.date.second << "\t"
-		<< "Bus id: " << obj.bus_id << "\nTickets: ";
+	os << high_cyan"Date: " <<white <<obj.date.first << "." << obj.date.second << "\t"
+		<< high_magenta"Bus id: "<<white << obj.bus_id << high_green"\nTickets: " << white;
 	for (int i = 0; i < obj.clients.size(); i++)
 		os << obj.clients.at(i).get() << " ";
 

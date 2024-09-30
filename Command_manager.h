@@ -12,6 +12,7 @@
 #include "Log.h"
 #include "Admin_config.h"
 #include "Logger.h"
+#include "Colors.hpp"
 
 using pair = std::pair<std::string, std::string>;
 using pair_int = std::pair<int, int>;
@@ -59,6 +60,7 @@ namespace command_manager {
 		static void find_seats_func(std::string&, Command*);
 		static void calculate_func(std::string&, Command*);
 
+
 		static void add_client_func(std::string&, Command*);
 		static void delete_client_func(std::string&, Command*);
 
@@ -66,7 +68,10 @@ namespace command_manager {
 		static void updater(Command*);
 
 		const std::string get_message(const unsigned int) const override;
+
 		//add copy and move constructors
+		//add sort functions
+
 
 		std::unordered_map<std::string, void(*)(Command*)> map;
 		std::unordered_map<std::string, void(*)(std::string&, Command*)> map_variables;

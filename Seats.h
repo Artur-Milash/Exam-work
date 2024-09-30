@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include "Log.h"
+#include "Colors.hpp"
 
 using pair = std::pair<std::string, std::string>;
 

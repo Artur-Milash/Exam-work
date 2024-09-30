@@ -261,17 +261,22 @@ const bool Bus::operator==(const std::pair<std::string, std::string> pair) const
 }
 
 std::ostream& operator<<(std::ostream& os, Bus& obj) {
-	os << "Bus id: " << obj.id << "     Departure: " << obj.departure.first << ":" << obj.departure.second
-		<< "     Arrival: " << obj.arrival.first << ":" << obj.arrival.second << "     Average cost: " << obj.cost << std::endl;
-	os << "Max seats: " << obj.max_seats << "     Booked seats: " << obj.seats
-		<< "     Available seats:" << obj.max_seats - obj.seats
-		<< "\nMax benefit seats: " << obj.max_benefit_seats << "     Booked benefit seats: " << obj.benefit_seats
-		<< "     Available benefit seats: " << obj.max_benefit_seats - obj.benefit_seats << std::endl;
-	os << "Route:     ";
+	os << high_magenta"Bus id: " << white << obj.id
+		<< high_cyan"     Departure: " << white << obj.departure.first << ":" << obj.departure.second
+		<< high_cyan"     Arrival: " << white << obj.arrival.first << ":" << obj.arrival.second
+		<< high_red"     Average cost: " << white<<obj.cost << std::endl;
+	os << green"Max seats: " << white << obj.max_seats 
+		<< "     Booked seats: " << obj.seats
+		<< "     Available non-benefit seats: " << obj.max_seats - ((obj.seats - obj.benefit_seats) + obj.max_benefit_seats)
+		<< "     Available seats: " <<obj.max_seats - obj.seats
+		<< green"\nMax benefit seats: " << white <<obj.max_benefit_seats 
+		<< "     Booked benefit seats: " << obj.benefit_seats
+		<< "     Available benefit seats: "<<obj.max_benefit_seats - obj.benefit_seats << std::endl;
+	os << high_yellow"Route:     ";
 	for (int i = 0; i < obj.route.size(); i++) {
-		os << obj.route.at(i);
+		os << white <<obj.route.at(i);
 		if (i != obj.route.size() - 1)
-			os << " ---> ";
+			os << high_yellow" ---> " << white;
 	}
 	os << "\n\n";
 	return os;

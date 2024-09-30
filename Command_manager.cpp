@@ -16,45 +16,46 @@ void command_manager::Command::cleaner(std::string& str) {
 void command_manager::Command::help_func(Command* obj) {
 	obj->set_function_name("help_func");
 	std::cout << "\nCommand list:\n"
-		<< "help - print command list\n"
-		<< "guide - guide\n"
-		<< "find bus (keys) - find bus which match inputted keys (keys must be written like (key1,key2,...,key))\n"
-		<< "find client (keys) - find client which match inputted keys (keys must be written like (key1,key2,...,key))\n"
-		<< "find seats (keys) - find all tickets\n"
-		<< "calculate (bus id, start city, arrival city, have benefit) - calculate cost (have benefit must be 0 or 1)\n\n"
-		<< "add client (name_surname, bus id, have benefit, date) - register new client\n"
+		<< cyan"help " << white "- print command list\n"
+		<< cyan"guide " << white "- guide\n\n"
+		<< yellow "find bus (keys) " << white "- find bus which match inputted keys(keys must be written like(key1, key2, ..., key))\n"
+		<< yellow"find client (keys) "<< white "- find client which match inputted keys(keys must be written like(key1, key2, ..., key))\n"
+		<< yellow"find seats (keys) " << white "- find all tickets\n"
+		<< yellow"calculate (bus id, start city, arrival city, have benefit) " << white "- calculate cost (have benefit must be 0 or 1)\n\n"
+		<< green "add client (name_surname, bus id, have benefit, date) " << white "- register new client\n"
 		<< "\t(have benefit must be 0 or 1, date must be day.month)\n"
-		<< "delete client (name) - remove client by it`s name\n\n"
-		<< "show all buses - shows every bus\n"
-		<< "show all clients - show every client\n"
-		<< "show all seats - show every seat\n"
-		<< "show all - show everything\n\n"
-		<< "clear - clear console\n"
-		<< "admin (password) - become admin\n"
-		<< "exit - end program\n";
+		<< high_red"delete client (name) " << white "- remove client by it`s name\n\n"
+		<< magenta "show all buses " << white "- shows every bus\n"
+		<< magenta"show all clients " << white "- show every client\n"
+		<< magenta"show all seats " << white "- show every seat\n"
+		<< magenta"show all " << white "- show everything\n\n"
+		<< cyan "clear " << white "- clear console\n"
+		<< cyan"admin (password) " << white "- become admin\n"
+		<< cyan"exit " << white "- end program\n";
 
 	if (obj->admin) {
-		std::cout << "\nAdmin commands:\n"
-			<< "admin add bus (departure,arrival,max seats,cost,benefit seats, route) - create and upload new bus\n"
+		std::cout << high_yellow"\n------------------------------------\n";
+		std::cout <<white"\nAdmin commands:\n"
+			<< green"admin add bus (departure, arrival, max seats, benefit seats, cost, route) " << white "- create and upload new bus\n"
 			<< "\tarrival and departure must be written like hours:minutes\n"
 			<< "\troute must be written like City1-City2-....-End City\n"
-			<< "admin delete bus (bus id) - delete bus in database by it`s id\n\n"
-			<< "admin update - update every file\n"
-			<< "admin change password (new password) - rewrite password\n"
-			<< "admin resize bus database (new limit) - rewrite limit of bus database\n"
-			<< "\tDo not use, if you don't know what you do\n"
-			<< "admin resize client database (new limit) - rewrite limit of client database\n"
-			<< "\tDo not use, if you don't know what you do\n"
-			<< "admin resize seats database (new limit) - rewrite limit of seats database\n"
-			<< "\tDo not use, if you don't know what you do\n"
-			<< "leave admin - leave admin rights\n";
+			<< high_red"admin delete bus (bus id) " << white "- delete bus in database by it`s id\n\n"
+			<< yellow"admin update " << white "- update every file\n"
+			<< yellow"admin change password (new password) " << white "- rewrite password\n\n"
+			<< cyan"admin resize bus database (new limit) " << white "- rewrite limit of bus database\n"
+			<< high_red"\tDo not use, if you don't know what you do\n"
+			<< cyan"admin resize client database (new limit) " << white "- rewrite limit of client database\n"
+			<< high_red"\tDo not use, if you don't know what you do\n"
+			<< cyan"admin resize seats database (new limit) " << white "- rewrite limit of seats database\n"
+			<< high_red"\tDo not use, if you don't know what you do\n"
+			<< cyan"leave admin " << white "- leave admin rights\n";
 	}
 	obj->log->save(obj, 0);
 }
 void command_manager::Command::exit_func(Command* obj) {
 	obj->set_function_name("exit_func");
 	obj->exit = 1;
-	
+
 	obj->log->save(obj, 0);
 }
 void command_manager::Command::clear_func(Command* obj) {
@@ -64,20 +65,20 @@ void command_manager::Command::clear_func(Command* obj) {
 #else
 	system("clear");
 #endif 
-	
+
 	obj->log->save(obj, 0);
 }
 void command_manager::Command::guide_func(Command* obj) {
 	obj->set_function_name("guide_func");
-	std::cout << "\nCommand list queue for user:\n"
-		<< "If you need to start up the project use 'admin add bus (properties)' command with admin rights\n"
-		<< "1. use 'find bus (keys)' command to find bus with keys (for example: (key1, .... , keyN))\n"
-		<< "2. use 'calculate (bus id, start city, arrival city, have benefit (0 for 'not' and 1 for 'yes'))' command to calculate cost\n"
-		<< "3. use 'add client (name_surname, bus id, have benefit (0 for 'not' and 1 for 'yes'), date)' to add client in databases\n"
-		<< "4. use 'delete client (name_surname) to delete user\n"
-		<< "\tAny other command is optional\n"
+	std::cout <<"\nCommand list queue for user:\n"
+		<< magenta"If you need to start up the project use 'admin add bus (properties)' command with admin rights\n"
+		<< yellow"1. use 'find bus (keys)' command" << white" to find bus with keys(for example: (key1, ...., keyN))\n"
+		<< yellow"2. use 'calculate (bus id, start city, arrival city, have benefit (0 for 'not' and 1 for 'yes'))' command" << white" to calculate cost\n"
+		<< yellow"3. use 'add client (name_surname, bus id, have benefit (0 for 'not' and 1 for 'yes'), date)'" << white" to add client in databases\n"
+		<< yellow"4. use 'delete client (name_surname)'" << white" to delete user, if needed\n"
+		<< green"\nAny other command is optional\n"
 		<< "See 'help' for more information\n";
-	
+
 	obj->log->save(obj, 0);
 }
 
@@ -203,18 +204,6 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
-	bus.set_cost(std::stoi(str, &size));
-	str = str.substr(size + 1, std::string::npos);
-
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	if (str.substr(0, size).empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
 
 	unsigned int checker = std::stoi(str, &size);
 	if (checker > bus.get_max_seats()) {
@@ -227,6 +216,18 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
+
+	size = str.find(",");
+	if (size == std::string::npos) {
+		obj->log->save(obj, 1);
+		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+	}
+	if (str.substr(0, size).empty()) {
+		obj->log->save(obj, 2);
+		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
+	}
+	bus.set_cost(std::stoi(str, &size));
+	str = str.substr(size + 1, std::string::npos);
 
 	while (size != std::string::npos) {
 		size = str.find("-");
@@ -364,7 +365,7 @@ void command_manager::Command::show_all_buses_func(Command* obj) {
 		Bus buff = obj->bus_base.get(i);
 		std::cout << buff;
 	}
-	obj->log->save(obj ,0);
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::show_all_clients_func(Command* obj) {
 	obj->set_function_name("show_all_clients_func");
@@ -379,7 +380,7 @@ void command_manager::Command::show_all_clients_func(Command* obj) {
 		std::cout << client_buff;
 		pos++;
 	}
-	obj->log->save(obj ,0);
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::show_all_seats_func(Command* obj) {
 	obj->set_function_name("show_all_seats_func");
@@ -399,9 +400,9 @@ void command_manager::Command::show_all_seats_func(Command* obj) {
 void command_manager::Command::show_all_func(Command* obj) {
 	obj->set_function_name("show_all_func");
 	show_all_buses_func(obj);
-	std::cout << "------------------------------------\n";
+	std::cout << white"------------------------------------\n";
 	show_all_clients_func(obj);
-	std::cout << "------------------------------------\n";
+	std::cout << white"------------------------------------\n";
 	show_all_seats_func(obj);
 	obj->log->save(obj, 0);
 }
@@ -478,7 +479,7 @@ void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
 			size = str.find(",");
 			buff_str = str.substr(0, size);
 			if (buff_str.empty()) {
-				obj->log->save(obj ,2);
+				obj->log->save(obj, 2);
 				throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 			}
 			std::size_t buff_size = buff_str.find_first_not_of("0123456789");
@@ -509,7 +510,7 @@ void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
 		}
 	}
 	if (result.empty()) {
-		obj->log->save(obj ,4);
+		obj->log->save(obj, 4);
 		throw std::runtime_error("\nNone bus was found");
 	}
 	obj->log->save(obj, 0);
@@ -580,7 +581,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 		str = str.substr(size + 1, std::string::npos);
 
 		if (result.empty()) {
-			obj->log->save(obj ,3);
+			obj->log->save(obj, 3);
 			throw std::runtime_error("\nNone client was found");
 		}
 
@@ -622,7 +623,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 		for (int i = 0; i < result.size(); i++) {
 			Client buff = obj->client_base.get(result.at(i));
 			std::cout << buff;
-		}	
+		}
 	}
 	obj->log->save(obj, 0);
 }
@@ -653,7 +654,7 @@ void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
 	else {
 		std::string buff_str = str.substr(0, size);
 		if (buff_str.empty()) {
-			obj->log->save(obj ,2);
+			obj->log->save(obj, 2);
 			throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 		}
 
@@ -686,7 +687,7 @@ void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
 			std::cout << seats;
 		}
 	}
-	obj->log->save(obj ,0);
+	obj->log->save(obj, 0);
 }
 void command_manager::Command::calculate_func(std::string& str, Command* obj) {
 	obj->set_function_name("calculate_func");
@@ -723,7 +724,7 @@ void command_manager::Command::calculate_func(std::string& str, Command* obj) {
 	}
 	buff_str = str.substr(0, size);
 	if (buff_str.empty()) {
-		obj->log->save(obj ,2);
+		obj->log->save(obj, 2);
 		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
 	}
 
@@ -731,7 +732,7 @@ void command_manager::Command::calculate_func(std::string& str, Command* obj) {
 
 	size = str.find(",");
 	if (size == std::string::npos) {
-		obj->log->save(obj ,1);
+		obj->log->save(obj, 1);
 		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
 	}
 	std::string end = str.substr(0, size);
@@ -749,12 +750,13 @@ void command_manager::Command::calculate_func(std::string& str, Command* obj) {
 
 	buff_int = obj->bus_base.get(find_result.at(0)).calculate(buff_str, end, str);
 	std::cout << "\nCost for client: " << buff_int << "\n";
-	obj->log->save(obj ,0);
+	obj->log->save(obj, 0);
 }
 
 void command_manager::Command::add_client_func(std::string& str, Command* obj) {
 	obj->set_function_name("add_client_func");
 	cleaner(str);
+
 	using pair = std::pair<std::string, std::string>;
 	using pair_int = std::pair<int, int>;
 	pair buff_time;
@@ -1079,7 +1081,7 @@ void command_manager::Command::time_checker(Command* obj) {
 			}
 
 		}
-		std::this_thread::sleep_for(std::chrono::minutes(5));
+		std::this_thread::sleep_for(std::chrono::minutes(1));
 	}
 }
 void command_manager::Command::updater(Command* obj) {
@@ -1101,7 +1103,6 @@ void command_manager::Command::updater(Command* obj) {
 		}
 
 		if (!find_result.empty()) {
-			
 			for (unsigned int i = 0; i < find_result.size(); i++) {
 				unsigned int buff_int = obj->seats_base.get(find_result.at(i)).get_id();
 				auto result = obj->bus_base.find(buff_int);
@@ -1126,9 +1127,10 @@ void command_manager::Command::updater(Command* obj) {
 					obj->bus_base.put(result.at(0), buff_bus);
 
 				}
+
 			}
 		}
-		std::this_thread::sleep_for(std::chrono::minutes(5));
+		std::this_thread::sleep_for(std::chrono::minutes(1));
 	}
 
 }

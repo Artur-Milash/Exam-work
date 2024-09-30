@@ -4,6 +4,7 @@
 #include <vector>
 #include "Log.h"
 #include "Randomized_class.h"
+#include "Colors.hpp"
 
 class Bus : public Randomized_class
 {

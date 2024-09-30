@@ -107,10 +107,10 @@ const bool Client::operator==(const bool& data) const {
 }
 
 std::ostream& operator<<(std::ostream& os, Client& obj) {
-	os << "Name: " << obj.name
-		<< "     Ticket: " << obj.ticket.get()
-		<< "     Bus id: " << obj.bus_id
-		<< "     Benefit: " << obj.have_benefit
-		<< "     Date: " << obj.date.first << "." << obj.date.second << "\n\n";
+	os << high_red"Name: " << white<<obj.name
+		<< high_green"     Ticket: " << white<< obj.ticket.get()
+		<< high_magenta"     Bus id: "<< white << obj.bus_id
+		<< high_yellow"     Benefit: " << white <<obj.have_benefit
+		<< high_cyan"     Date: "<< white << obj.date.first << "." << obj.date.second << "\n\n";
 	return os;
 }
