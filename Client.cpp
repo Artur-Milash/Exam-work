@@ -105,6 +105,13 @@ const bool Client::operator==(const Ticket& data) const {
 const bool Client::operator==(const bool& data) const {
 	return this->have_benefit == data ? true : false;
 }
+const bool Client::operator==(const std::pair<int, int>& data) const {
+	if (data.first == std::stoi(this->get_date().first) &&
+		data.second == std::stoi(this->get_date().second))
+		return true;
+	return false;
+}
+
 
 std::ostream& operator<<(std::ostream& os, Client& obj) {
 	os << high_red"Name: " << white<<obj.name

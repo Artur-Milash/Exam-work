@@ -25,6 +25,9 @@ void command_manager::Command::help_func(Command* obj) {
 		<< green "add client (name_surname, bus id, have benefit, date) " << white "- register new client\n"
 		<< "\t(have benefit must be 0 or 1, date must be day.month)\n"
 		<< high_red"delete client (name) " << white "- remove client by it`s name\n\n"
+		<< high_magenta"sort client (key) " << white "- set sorting key for 'show client' command\n"
+		<< "\t(key can be -- reset, name, ticket, bus id, date)\n"
+		<<"\n"
 		<< magenta "show all buses " << white "- shows every bus\n"
 		<< magenta"show all clients " << white "- show every client\n"
 		<< magenta"show all seats " << white "- show every seat\n"
@@ -369,17 +372,25 @@ void command_manager::Command::show_all_buses_func(Command* obj) {
 }
 void command_manager::Command::show_all_clients_func(Command* obj) {
 	obj->set_function_name("show_all_clients_func");
+
 	if (obj->client_base.size() == 0) {
 		obj->log->save(obj, 3);
 		throw std::runtime_error("\nThere isn't any client in database");
 	}
-	unsigned int pos = 0;
+
 	std::cout << "\n";
+	if (!obj->sort_client.empty()) {
+		std::cout << "Sorting key: " << obj->sort_client << "\n\n";
+	}
+
+	unsigned int pos = 0;
+
 	while (pos != obj->client_base.get_capacity()) {
 		Client client_buff = obj->client_base.get(pos);
 		std::cout << client_buff;
 		pos++;
 	}
+
 	obj->log->save(obj, 0);
 }
 void command_manager::Command::show_all_seats_func(Command* obj) {
@@ -410,6 +421,7 @@ void command_manager::Command::show_all_func(Command* obj) {
 void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
 	obj->set_function_name("find_bus_func");
 	cleaner(str);
+	std::cout << "\n";
 
 	std::vector<pos_type> result;
 	std::size_t size = str.find(",");
@@ -519,6 +531,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 	obj->set_function_name("find_client_func");
 	std::cout << std::endl;
 	cleaner(str);
+
 	bool executed = 0;
 	std::size_t size = str.find(",");
 	if (size == std::string::npos) {
@@ -630,6 +643,8 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
 	obj->set_function_name("find_seats_func");
 	cleaner(str);
+	std::cout << "\n";
+
 	std::size_t size = str.find_first_not_of("1234567890.,");
 	if (size != std::string::npos) {
 		obj->log->save(obj, 1);
@@ -750,6 +765,78 @@ void command_manager::Command::calculate_func(std::string& str, Command* obj) {
 
 	buff_int = obj->bus_base.get(find_result.at(0)).calculate(buff_str, end, str);
 	std::cout << "\nCost for client: " << buff_int << "\n";
+	obj->log->save(obj, 0);
+}
+
+void command_manager::Command::sort_client_func(std::string& str, Command* obj) {
+	obj->set_function_name("sort_client_func");
+	
+	if (str == "date") {
+		obj->sort_client = str;
+
+		for (unsigned int i = 0; i < obj->client_base.get_limit(); i++) {
+			for (unsigned int j = 0; j < obj->client_base.get_capacity() - 1; j++) {
+				pair_int first;
+				first.first = std::stoi(obj->client_base.get(j).get_date().first);
+				first.second = std::stoi(obj->client_base.get(j).get_date().second);
+
+				pair_int second;
+				second.first = std::stoi(obj->client_base.get(j + 1).get_date().first);
+				second.second = std::stoi(obj->client_base.get(j + 1).get_date().second);
+
+				if (first.second < second.second) {
+					obj->client_base.swap(j, j + 1);
+				}
+				if (first.first < second.first && first.second == second.second) {
+					obj->client_base.swap(j, j + 1);
+				}
+			}
+		}
+	}
+	else if (str == "name") {
+		for (unsigned int i = 0; i < obj->client_base.get_limit(); i++) {
+			for (unsigned int j = 0; j < obj->client_base.get_capacity() - 1; j++) {
+				if (obj->client_base.get(j).get_name() > obj->client_base.get(j + 1).get_name()) {
+					obj->client_base.swap(j, j + 1);
+				}
+			}
+		}
+	}
+	else if (str == "ticket") {
+		for (unsigned int i = 0; i < obj->client_base.get_limit(); i++) {
+			for (unsigned int j = 0; j < obj->client_base.get_capacity() - 1; j++) {
+				if (obj->client_base.get(j).get_ticket() < obj->client_base.get(j + 1).get_ticket()) {
+					obj->client_base.swap(j, j + 1);
+				}
+			}
+		}
+	}
+	else if (str == "benefit") {
+		for (unsigned int i = 0; i < obj->client_base.get_limit(); i++) {
+			for (unsigned int j = 0; j < obj->client_base.get_capacity() - 1; j++) {
+				if (obj->client_base.get(j).get_benefit() < obj->client_base.get(j + 1).get_benefit()) {
+					obj->client_base.swap(j, j + 1);
+				}
+			}
+		}
+	}
+	else if (str == "bus id") {
+		for (unsigned int i = 0; i < obj->client_base.get_limit(); i++) {
+			for (unsigned int j = 0; j < obj->client_base.get_capacity() - 1; j++) {
+				if (obj->client_base.get(j).get_bus_id() < obj->client_base.get(j + 1).get_bus_id()) {
+					obj->client_base.swap(j, j + 1);
+				}
+			}
+		}
+	}
+	else if (str == "reset") {
+		obj->sort_client = "";
+	}
+	else{
+		obj->log->save(obj, 7);
+		throw std::runtime_error("\nInvalid sorting key");
+	}
+
 	obj->log->save(obj, 0);
 }
 
@@ -908,21 +995,24 @@ void command_manager::Command::add_client_func(std::string& str, Command* obj) {
 		buff_pair.first = std::stoi(obj->bus_base.get(find_result.at(0)).get_departure(0), &size);
 		buff_pair.second = std::stoi(obj->bus_base.get(find_result.at(0)).get_departure(1), &size);
 		bool executed = 0;
-		if (client.get_date() == buff_time) {
+
+		pair_int buff_client_time;
+		buff_client_time.first = std::stoi(client.get_date().first);
+		buff_client_time.second = std::stoi(client.get_date().second);
+
+		pair_int buff_int_time;
+		buff_int_time.first = std::stoi(buff_time.first);
+		buff_int_time.second = std::stoi(buff_time.second);
+		
+		if (buff_client_time == buff_int_time) {
 			if (buff_clock.first <= buff_pair.first) {
 				bool checked = 0;
 				if (buff_pair.first != buff_clock.first)
 					checked = 1;
 				if (buff_clock.second < buff_pair.second || checked == 1) {
-					Bus buff_bus;
-					try {
-						buff_bus = obj->bus_base.get(find_result.at(0)).add_client(client.get_benefit());
-					}
-					catch (std::runtime_error& ex) {
-						throw std::runtime_error(ex);
-					};
+					
 					obj->client_base.put(obj->client_base.size() + 1, client);
-					obj->bus_base.put(find_result.at(0), buff_bus);
+					obj->bus_base.get_ptr(find_result.at(0))->add_client(client.get_benefit());
 
 					find_result = obj->seats_base.find(buff_int);
 
@@ -960,6 +1050,9 @@ void command_manager::Command::add_client_func(std::string& str, Command* obj) {
 				obj->log->save("error (add_client_func): bus already departured");
 				throw std::runtime_error("\nBus has already departured");
 			}
+		}
+		else {
+			std::cout << "\nHelp\n";
 		}
 
 		if (!executed) {
@@ -1031,11 +1124,11 @@ void command_manager::Command::delete_client_func(std::string& str, Command* obj
 
 void command_manager::Command::time_checker(Command* obj) {
 	while (!obj->end()) {
-		pair buff_time;
+		pair_int buff_time;
 		std::mutex mutex;
 		std::lock_guard<std::mutex> lock(mutex);
-		buff_time.first = std::format("{:%d}", std::chrono::current_zone()->to_local(std::chrono::system_clock::now()));
-		buff_time.second = std::format("{:%m}", std::chrono::current_zone()->to_local(std::chrono::system_clock::now()));
+		buff_time.first = std::stoi(std::format("{:%d}", std::chrono::current_zone()->to_local(std::chrono::system_clock::now())));
+		buff_time.second = std::stoi(std::format("{:%m}", std::chrono::current_zone()->to_local(std::chrono::system_clock::now())));
 
 		pair_int buff_clock;
 		std::size_t size = std::string::npos;
@@ -1057,7 +1150,7 @@ void command_manager::Command::time_checker(Command* obj) {
 					bool checked = 0;
 					if (buff_arrival.first == buff_clock.first)
 						checked = 1;
-					if (buff_arrival.second < buff_clock.second || checked != 0) {
+					if (buff_arrival.second < buff_clock.second || checked == 0) {
 
 						Bus buff_bus = obj->bus_base.get(result.at(0)).remove_all_clients();
 						obj->bus_base.put(result.at(0), buff_bus);
@@ -1169,6 +1262,7 @@ command_manager::Command::Command() {
 	map_variables.emplace("admin resize bus database", admin_resize_bus_database_func);
 	map_variables.emplace("admin resize client database", admin_resize_client_database_func);
 	map_variables.emplace("admin resize seats database", admin_resize_seats_database_func);
+	map_variables.emplace("sort client", sort_client_func);
 
 	std::thread thr(time_checker, this);
 	thr.detach();
@@ -1248,6 +1342,8 @@ const std::string command_manager::Command::get_message(const unsigned int msg) 
 		return "seat not found";
 	case 6:
 		return "user wasn't admin";
+	case 7:
+		return "invalid sorting key";
 	default:
 		return "undefined message";
 	}

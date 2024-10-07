@@ -33,6 +33,10 @@ namespace command_manager {
 		std::string password;
 		Log* log = Log::create();
 
+		std::string sort_client;
+		std::string sort_bus;
+		std::string sort_seats;
+
 		static void cleaner(std::string&);
 
 		static void help_func(Command*);
@@ -60,6 +64,7 @@ namespace command_manager {
 		static void find_seats_func(std::string&, Command*);
 		static void calculate_func(std::string&, Command*);
 
+		static void sort_client_func(std::string&, Command*);
 
 		static void add_client_func(std::string&, Command*);
 		static void delete_client_func(std::string&, Command*);

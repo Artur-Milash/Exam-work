@@ -289,6 +289,13 @@ public:
 		return this->limit;
 	}
 
+	void swap(const pos_type& first, const pos_type& second) {
+		T buff = this->get(first);
+		T buff_2 = this->get(second);
+		this->put(first, buff_2);
+		this->put(second, buff);
+	}
+
 	template <typename other>
 	std::vector<pos_type> find(const other& key) {
 		std::vector<pos_type> result{};

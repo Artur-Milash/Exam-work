@@ -53,6 +53,7 @@ public:
 	const bool operator==(const pair& data) const;
 	const bool operator==(const Ticket& data) const;
 	const bool operator==(const bool& data) const;
+	const bool operator==(const std::pair<int, int>& data) const;
 
 	friend std::ostream& operator<<(std::ostream& os, Client& obj);
 };

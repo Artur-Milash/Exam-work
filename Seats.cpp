@@ -105,6 +105,12 @@ const bool Seats::operator==(const std::string data) const {
 		return true;
 	return false;
 }
+const bool Seats::operator==(const std::pair<int, int>& data) const {
+	if (data.first == std::stoi(this->get_date().first) &&
+		data.second == std::stoi(this->get_date().second))
+		return true;
+	return false;
+}
 
 std::ostream& operator<<(std::ostream& os, Seats& obj) {
 	os << high_cyan"Date: " <<white <<obj.date.first << "." << obj.date.second << "\t"
