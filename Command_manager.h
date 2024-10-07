@@ -65,6 +65,8 @@ namespace command_manager {
 		static void calculate_func(std::string&, Command*);
 
 		static void sort_client_func(std::string&, Command*);
+		static void sort_seats_func(std::string&, Command*);
+		static void sort_bus_func(std::string&, Command*);
 
 		static void add_client_func(std::string&, Command*);
 		static void delete_client_func(std::string&, Command*);
@@ -75,8 +77,6 @@ namespace command_manager {
 		const std::string get_message(const unsigned int) const override;
 
 		//add copy and move constructors
-		//add sort functions
-
 
 		std::unordered_map<std::string, void(*)(Command*)> map;
 		std::unordered_map<std::string, void(*)(std::string&, Command*)> map_variables;
