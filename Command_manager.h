@@ -13,6 +13,7 @@
 #include "Admin_config.h"
 #include "Logger.h"
 #include "Colors.hpp"
+#include "Handlers.h"
 
 using pair = std::pair<std::string, std::string>;
 using pair_int = std::pair<int, int>;
@@ -31,7 +32,6 @@ namespace command_manager {
 		bool exit = 0;
 		bool admin = 0;
 		std::string password;
-		Log* log = Log::create();
 
 		std::string sort_client;
 		std::string sort_bus;
@@ -82,6 +82,8 @@ namespace command_manager {
 		std::unordered_map<std::string, void(*)(std::string&, Command*)> map_variables;
 
 	public:
+		Log* log = Log::create();
+
 		Command();
 		~Command();
 
