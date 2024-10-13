@@ -72,6 +72,7 @@ void command_manager::Command::exit_func(Command* obj) {
 }
 void command_manager::Command::clear_func(Command* obj) {
 	obj->set_function_name("clear_func");
+
 #ifdef _WIN32
 	system("cls");
 #else
