@@ -6,11 +6,15 @@
 #include "Randomized_class.h"
 #include "Colors.hpp"
 
+
+
 class Bus : public Randomized_class
 {
 private:
-	std::pair<std::string, std::string> arrival;
-	std::pair<std::string, std::string> departure;
+	using pair = std::pair<std::string, std::string>;
+
+	pair arrival;
+	pair departure;
 	unsigned int max_seats;
 	unsigned int seats;
 	unsigned int id;
@@ -18,13 +22,15 @@ private:
 	unsigned int benefit_seats;
 	unsigned int max_benefit_seats;
 	std::vector<std::string> route;
+
 	Log* log = Log::create();
 public:
 	Bus();
-	Bus(unsigned int max);
-	Bus(unsigned int max, unsigned int numb);
-	Bus(unsigned int max, unsigned int numb, unsigned int new_cost);
-	Bus(unsigned int max, unsigned int numb, unsigned int new_cost, unsigned int benefit);
+	Bus(pair _arrival);
+	Bus(pair _arrival, pair _departure);
+	Bus(pair _arrival, pair _departure, unsigned int _max_seats);
+	Bus(pair _arrival, pair _departure, unsigned int _max_seats, unsigned int _max_benefit);
+	Bus(pair _arrival, pair _departure, unsigned int _max_seats, unsigned int _max_benefit, unsigned int _cost);
 	Bus(const Bus& obj);
 	~Bus();
 

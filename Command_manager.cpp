@@ -129,130 +129,101 @@ void Command::admin_add_bus_func(std::string& str, Command* obj) {
 		obj->log->save(obj, 6);
 		throw std::runtime_error("\nYou must have admin rights to execute this command");
 	}
-	Bus bus;
 
 	cleaner(str);
 
-	std::size_t size = str.find(":");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nInvalid departure syntax\nSee 'help' for more information");
+	Amount_handler* first = new Amount_handler;
+	first->set_next(new Missed_value_handler)
+		->set_next(new Amount_handler)->set_next(new Missed_value_handler)
+		->set_next(new Amount_handler)->set_next(new Missed_value_handler)
+		->set_next(new Amount_handler)->set_next(new Missed_value_handler)
+		->set_next(new Amount_handler)->set_next(new Missed_value_handler)
+		->set_next(new End_handler);
+
+	bool checked = 0;
+
+	try {
+		if (first->handle(str, obj)) {
+			checked = 1;
+		}
+		Abstract_handler::delete_chain(first);
 	}
-	std::string buff_str = str.substr(0, size);
-	if (buff_str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
+	catch (std::runtime_error& e) {
+		Abstract_handler::delete_chain(first);
+		throw e;
 	}
 
-	str = str.substr(size + 1, std::string::npos);
+	if (checked) {
+		pair bus_departure;
 
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nInvalid departure syntax\nSee 'help' for more information");
-	}
-	std::string buff_min = str.substr(0, size);
-	if (buff_min.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-
-	if (std::stoi(buff_str, 0) >= 24 || std::stoi(buff_min, 0) >= 60) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nInvalid departure value\nSee 'help' for more information");
-	}
-
-	bus.set_departure(buff_str, buff_min);
-	str = str.substr(size + 1, std::string::npos);
-	//
-	size = str.find(":");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nInvalid arrival syntax\nSee 'help' for more information");
-	}
-	buff_str = str.substr(0, size);
-	if (buff_str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-	str = str.substr(size + 1, std::string::npos);
-
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nInvalid arrival syntax\nSee 'help' for more information");
-	}
-	buff_min = str.substr(0, size);
-	if (buff_min.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-
-	if (std::stoi(buff_str, 0) >= 24 || std::stoi(buff_min, 0) >= 60) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nInvalid arrival value\nSee 'help' for more information");
-	}
-
-	bus.set_arrival(buff_str, buff_min);
-	str = str.substr(size + 1, std::string::npos);
-
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	if (str.substr(0, size).empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-	bus.set_max_seats(std::stoi(str, &size));
-	str = str.substr(size + 1, std::string::npos);
-
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	if (str.substr(0, size).empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-
-	unsigned int checker = std::stoi(str, &size);
-	if (checker > bus.get_max_seats()) {
-		obj->log->save("error (admin_add_bus_func): not enough seats");
-		throw std::runtime_error("\nAmount of benefit seats must be less or equal to max of seats");
-	}
-	bus.set_max_benefit_seats(std::stoi(str, &size));
-	str = str.substr(size + 1, std::string::npos);
-	if (str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	if (str.substr(0, size).empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-	bus.set_cost(std::stoi(str, &size));
-	str = str.substr(size + 1, std::string::npos);
-
-	while (size != std::string::npos) {
-		size = str.find("-");
-		buff_str = str.substr(0, size);
-		bus.set_route(buff_str);
+		size_t size = str.find(":");
+		if (size == std::string::npos) {
+			obj->log->save(obj, 1);
+			throw std::runtime_error("\nInvalid syntax\nInvalid departure syntax\nSee 'help' for more information");
+		}
+		bus_departure.first = str.substr(0, size);
 		str = str.substr(size + 1, std::string::npos);
-	}
 
-	bus.generate(6);
-	obj->bus_base.put(obj->bus_base.size() + 1, bus);
-	obj->bus_base.update();
-	obj->log->save(obj, 0);
+		size = str.find(",");
+		bus_departure.second = str.substr(0, size);
+		str = str.substr(size + 1, std::string::npos);
+
+		if (std::stoi(bus_departure.first, 0) >= 24 || std::stoi(bus_departure.second, 0) >= 60) {
+			obj->log->save(obj, 2);
+			throw std::runtime_error("\nInvalid syntax\nInvalid departure value\nSee 'help' for more information");
+		}
+
+		pair bus_arrival;
+
+		size = str.find(":");
+		if (size == std::string::npos) {
+			obj->log->save(obj, 1);
+			throw std::runtime_error("\nInvalid syntax\nInvalid departure syntax\nSee 'help' for more information");
+		}
+		bus_arrival.first = str.substr(0, size);
+		str = str.substr(size + 1, std::string::npos);
+
+		size = str.find(",");
+		bus_arrival.second = str.substr(0, size);
+		str = str.substr(size + 1, std::string::npos);
+
+		if (std::stoi(bus_arrival.first, 0) >= 24 || std::stoi(bus_arrival.second, 0) >= 60) {
+			obj->log->save(obj, 2);
+			throw std::runtime_error("\nInvalid syntax\nInvalid departure value\nSee 'help' for more information");
+		}
+
+		size = str.find(",");
+		unsigned int bus_max_seats = std::stoi(str.substr(0, size));
+		str = str.substr(size + 1, std::string::npos);
+
+		size = str.find(",");
+		unsigned int bus_max_benefit_seats = std::stoi(str.substr(0, size));
+		str = str.substr(size + 1, std::string::npos);
+
+		if (bus_max_benefit_seats > bus_max_seats) {
+			obj->log->save("error (admin_add_bus_func): not enough seats");
+			throw std::runtime_error("\nAmount of benefit seats must be less or equal to max of seats");
+		}
+
+		size = str.find(",");
+		unsigned int bus_cost = std::stoi(str.substr(0, size));
+		str = str.substr(size + 1, std::string::npos);
+
+		Bus bus{bus_arrival,bus_departure, bus_max_seats, bus_max_benefit_seats, bus_cost};
+
+		std::string buff_str;
+		while (size != std::string::npos) {
+			size = str.find("-");
+			buff_str = str.substr(0, size);
+			bus.set_route(buff_str);
+			str = str.substr(size + 1, std::string::npos);
+		}
+
+		bus.generate(6);
+		obj->bus_base.put(obj->bus_base.size() + 1, bus);
+		obj->bus_base.update();
+		obj->log->save(obj, 0);
+	}
 }
 void Command::admin_delete_bus_func(std::string& str, Command* obj) {
 	obj->set_function_name("admin_delete_bus_func");
@@ -751,65 +722,58 @@ void Command::find_seats_func(std::string& str, Command* obj) {
 void Command::calculate_func(std::string& str, Command* obj) {
 	obj->set_function_name("calculate_func");
 	cleaner(str);
-	std::size_t size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+
+	Amount_handler* first = new Amount_handler;
+	first->set_next(new Missed_value_handler)
+		->set_next(new Amount_handler)->set_next(new Missed_value_handler)
+		->set_next(new Amount_handler)->set_next(new Missed_value_handler)
+		->set_next(new End_handler);
+
+	bool checked = 0;
+
+	try {
+		if (first->handle(str, obj)) {
+			checked = 1;
+		}
+		Abstract_handler::delete_chain(first);
+	}
+	catch (std::runtime_error& e) {
+		Abstract_handler::delete_chain(first);
+		throw e;
 	}
 
-	std::string buff_str = str.substr(0, size);
-	if (buff_str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
+	if (checked) {
+		std::size_t size = str.find(",");
+		if (str.substr(0, size).find_first_not_of("1234567890") != std::string::npos) {
+			obj->log->save(obj, 1);
+			throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+		}
+		unsigned int bus_id = std::stoi(str.substr(0, size));
+		auto find_result = obj->bus_base.find(bus_id);
+		if (find_result.empty()) {
+			obj->log->save(obj, 4);
+			throw std::runtime_error("\nThere isn't any bus this such id");
+		}
+		str = str.substr(size + 1, std::string::npos);
 
-	std::size_t buff_size = buff_str.find_first_not_of("0123456789");
-	if (buff_size != std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	unsigned int buff_int = std::stoi(buff_str, &size);
-	auto find_result = obj->bus_base.find(buff_int);
-	if (find_result.empty()) {
-		obj->log->save(obj, 4);
-		throw std::runtime_error("\nThere isn't any bus this such id");
-	}
-	str = str.substr(size + 1, std::string::npos);
+		size = str.find(",");
+		std::string start = str.substr(0, size);
+		str = str.substr(size + 1, std::string::npos);
 
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	buff_str = str.substr(0, size);
-	if (buff_str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
+		size = str.find(",");
+		std::string end = str.substr(0, size);
+		str = str.substr(size + 1, std::string::npos);
 
-	str = str.substr(size + 1, std::string::npos);
+		size = str.find_first_not_of("01");
+		if (size != std::string::npos) {
+			obj->log->save(obj, 1);
+			throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+		}
 
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+		unsigned int cost = obj->bus_base.get(find_result.at(0)).calculate(start, end, str);
+		std::cout << "\nCost for client: " << cost << "\n";
+		obj->log->save(obj, 0);
 	}
-	std::string end = str.substr(0, size);
-	str = str.substr(size + 1, std::string::npos);
-	if (str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-
-	size = str.find_first_not_of("01");
-	if (size != std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-
-	buff_int = obj->bus_base.get(find_result.at(0)).calculate(buff_str, end, str);
-	std::cout << "\nCost for client: " << buff_int << "\n";
-	obj->log->save(obj, 0);
 }
 
 void Command::sort_client_func(std::string& str, Command* obj) {

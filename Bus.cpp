@@ -1,18 +1,23 @@
 #include "Bus.h"
 
-Bus::Bus() : Bus(0, 0, 0, 0) {}
-Bus::Bus(unsigned int max) : Bus(max, 0, 0, 0) {}
-Bus::Bus(unsigned int max, unsigned int numb) : Bus(max, numb, 0, 0) {}
-Bus::Bus(unsigned int max, unsigned int numb, unsigned int new_cost) : Bus(max, numb, new_cost, 0) {}
-Bus::Bus(unsigned int max, unsigned int numb, unsigned int new_cost, unsigned int benefit)
-	: max_seats{ max }, id{ numb }, cost{ new_cost }, max_benefit_seats{ benefit }, seats{ 0 }, benefit_seats{ 0 } {
+Bus::Bus() : Bus(pair{"0","0"}, pair{ "0","0" }, 0, 0, 0) {}
+Bus::Bus(pair _arrival) : Bus(_arrival, pair{ "0", "0" }, 0, 0, 0) {}
+Bus::Bus(pair _arrival, pair _departure) : Bus(_arrival, _departure, 0, 0, 0) {}
+Bus::Bus(pair _arrival, pair _departure, unsigned int _max_seats) :Bus(_arrival, _departure, _max_seats, 0, 0) {}
+Bus::Bus(pair _arrival, pair _departure, unsigned int _max_seats, unsigned int _max_benefit)
+	: Bus(_arrival, _departure, _max_seats, _max_benefit, 0) {}
+
+Bus::Bus(pair _arrival, pair _departure, unsigned int _max_seats, unsigned int _max_benefit, unsigned int _cost) 
+	: arrival{ _arrival }, departure{ _departure }, max_seats{ _max_seats }, max_benefit_seats{ _max_benefit }, cost{_cost} {
 	srand((unsigned int)std::time(0));
 }
+
 Bus::Bus(const Bus& obj) : arrival{ obj.arrival }, departure{ obj.departure },
 max_seats{ obj.max_seats }, max_benefit_seats{ obj.max_benefit_seats },
 seats{ obj.seats }, cost{ obj.cost }, benefit_seats{ obj.benefit_seats }, route{ obj.route }, id{obj.id} {
 	srand((unsigned int)std::time(0));
 }
+
 Bus::~Bus() = default;
 
 void Bus::set_max_benefit_seats(unsigned int& value) { max_benefit_seats = value; }
