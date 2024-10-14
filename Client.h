@@ -19,10 +19,11 @@ private:
 public:
 	Client();
 	Client(std::string name_value);
-	Client(std::string name_value, unsigned int ticket_value);
-	Client(std::string name_value, unsigned int ticket_value, unsigned int bus_value);
-	Client(std::string name_value, unsigned int ticket_value, unsigned int bus_value, bool value);
+	Client(std::string name_value, unsigned int bus);
+	Client(std::string name_value, unsigned int bus, bool value);
+	Client(std::string name_value, unsigned int bus, bool value, pair date);
 	~Client();
+	Client(const Client&);
 
 	void set_date(std::string& day, std::string& month);
 	void set_date(std::string&& day, std::string&& month);

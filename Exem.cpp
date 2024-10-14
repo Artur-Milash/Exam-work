@@ -7,7 +7,7 @@
 int main()
 {
 	Log* log = Log::create();
-	command_manager::Command command;
+	Command command;
 	std::cout << "Program has started\n(If you need command list - print 'help')\nPlease, enter command:\n";
 	do {
 		try {

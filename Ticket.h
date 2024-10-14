@@ -12,6 +12,7 @@ public:
 	Ticket();
 	Ticket(unsigned int value);
 	~Ticket();
+	Ticket(const Ticket&);
 
 	void generate(unsigned int char_amount) override;
 

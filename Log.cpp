@@ -26,7 +26,7 @@ Log* Log::create() {
 	return ptr;
 }
 
-void Log::save(const std::string& msg) {
+void Log::save(const std::string msg) {
 	std::mutex mutex;
 	std::lock_guard<std::mutex> lock(mutex);
 	std::ofstream file(*str_ptr, std::ios::app);
@@ -42,4 +42,13 @@ void Log::save(const Logger* obj, const unsigned int&& msg) {
 	file << std::format("{:%X}", std::chrono::current_zone()
 		->to_local(std::chrono::system_clock::now()))
 		<< " || " << obj->get_function_name() << " | " << obj->get_message(msg) << std::endl;
+}
+
+void Log::save(const Logger* obj, const std::string msg) {
+	std::mutex mutex;
+	std::lock_guard<std::mutex> lock(mutex);
+	std::ofstream file(*str_ptr, std::ios::app);
+	file << std::format("{:%X}", std::chrono::current_zone()
+		->to_local(std::chrono::system_clock::now()))
+		<< " || " << obj->get_function_name() << " | " << msg << std::endl;
 }

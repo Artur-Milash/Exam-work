@@ -28,14 +28,23 @@ private:
 
 	Log* log = Log::create();
 
+
 	int select(std::string& str, int& data) { return std::stoi(str, 0); }
+
 	long select(std::string& str, long& data) { return std::stol(str, 0); }
+
 	long long select(std::string& str, long long& data) { return std::stoll(str, 0); }
+
 	unsigned long select(std::string& str, unsigned long& data) { return std::stoul(str, 0); }
+
 	pos_type select(std::string& str, pos_type& data) { return std::stoull(str, 0); }
+
 	float select(std::string& str, float& data) { return std::stof(str, 0); }
+
 	double select(std::string& str, double& data) { return std::stod(str, 0); }
+
 	std::string select(std::string& str, std::string& data) { return str; }
+
 	template <typename other>
 	other select(std::string& str, other& data) {
 		str >> data;
@@ -120,12 +129,12 @@ private:
 	}
 
 public:
-	Database(const Database<T>&) = delete;
 	Database(Database<T>&&) = delete;
 	void operator=(const Database<T>&) = delete;
 
 	Database(name_type& name) : Database(name, 500) {}
 	Database(name_type& name, const pos_type& lim) : file_name{ name }, limit{ lim }, begin_pos{ 0 }, capacity{ 0 } {
+		{ std::ofstream create{ file_name, std::ios::app }; }
 		std::ifstream file(file_name);
 		std::string str{};
 		while (std::getline(file, str)) {
@@ -136,6 +145,12 @@ public:
 	}
 	~Database() {
 		upload(this);
+	}
+	Database(const Database<T>& obj, const std::string& destination) : limit{ obj.limit }, file_name{destination} {
+		{ std::ofstream create{ file_name, std::ios::app }; }
+		for (pos_type i = 0; i < obj.capacity; i++) {
+			this->put(i, obj.get(i));
+		}
 	}
 
 	void put(const pos_type pos, const T& data) {

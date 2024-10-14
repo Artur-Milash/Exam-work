@@ -3,6 +3,7 @@
 Ticket::Ticket() : Ticket(0) {}
 Ticket::Ticket(unsigned int value) : ticket{ value } { srand((unsigned int)time(NULL)); }
 Ticket::~Ticket() = default;
+Ticket::Ticket(const Ticket& obj) : ticket{ obj.ticket } { srand((unsigned int)std::time(0)); }
 
 void Ticket::generate(unsigned int char_amount) {
 	std::string str;

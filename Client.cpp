@@ -1,11 +1,14 @@
 #include "Client.h"
 
-Client::Client() : Client("None", 0, 0, 0) {}
-Client::Client(std::string name_value) : Client(name_value, 0, 0, 0) {}
-Client::Client(std::string name_value, unsigned int ticket_value) : Client(name_value, ticket_value, 0, 0) {}
-Client::Client(std::string name_value, unsigned int ticket_value, unsigned int bus_value) : Client(name_value, ticket_value, bus_value, 0) {}
-Client::Client(std::string name_value, unsigned int ticket_value, unsigned int bus_value, bool value)
-	: name{ name_value }, ticket{ ticket_value }, bus_id{ bus_value }, have_benefit{ value } {}
+Client::Client() : Client("None", 0, 0, pair{ "0","0"}) {}
+Client::Client(std::string name_value) : Client(name_value, 0, 0, pair{ "0","0" }) {}
+Client::Client(std::string name_value, unsigned int bus) : Client(name_value, bus, 0, pair{ "0","0"}) {}
+Client::Client(std::string name_value, unsigned int bus, bool benefit) : Client(name_value, bus, benefit, pair{ "0","0" }) {}
+Client::Client(std::string name_value, unsigned int bus, bool benefit, pair date_value)
+	: name{ name_value }, bus_id{ bus }, have_benefit{ benefit }, date{ date_value } {}
+Client::Client(const Client& obj) : name{ obj.name }, bus_id{ obj.bus_id },
+	have_benefit{ obj.have_benefit }, date{ obj.date }, ticket{obj.ticket} {}
+
 Client::~Client() = default;
 
 void Client::set_date(std::string& day, std::string& month) { date.first = day; date.second = month; }

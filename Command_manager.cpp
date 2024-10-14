@@ -1,6 +1,6 @@
 #include "Command_manager.h"
 
-void command_manager::Command::cleaner(std::string& str) {
+void Command::cleaner(std::string& str) {
 	while (str.find(" ") != std::string::npos) {
 		auto it = str.begin();
 		while (it != str.end()) {
@@ -13,7 +13,7 @@ void command_manager::Command::cleaner(std::string& str) {
 	}
 }
 
-void command_manager::Command::help_func(Command* obj) {
+void Command::help_func(Command* obj) {
 	obj->set_function_name("help_func");
 	std::cout << "\nCommand list:\n"
 		<< cyan"help " << white "- print command list\n"
@@ -64,13 +64,13 @@ void command_manager::Command::help_func(Command* obj) {
 	}
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::exit_func(Command* obj) {
+void Command::exit_func(Command* obj) {
 	obj->set_function_name("exit_func");
 	obj->exit = 1;
 
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::clear_func(Command* obj) {
+void Command::clear_func(Command* obj) {
 	obj->set_function_name("clear_func");
 
 #ifdef _WIN32
@@ -81,7 +81,7 @@ void command_manager::Command::clear_func(Command* obj) {
 
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::guide_func(Command* obj) {
+void Command::guide_func(Command* obj) {
 	obj->set_function_name("guide_func");
 	std::cout << "\nCommand list queue for user:\n"
 		<< magenta"If you need to start up the project use 'admin add bus (properties)' command with admin rights\n"
@@ -95,7 +95,7 @@ void command_manager::Command::guide_func(Command* obj) {
 	obj->log->save(obj, 0);
 }
 
-void command_manager::Command::admin_update_func(Command* obj) {
+void Command::admin_update_func(Command* obj) {
 	obj->set_function_name("admin_update_func");
 	if (!obj->admin) {
 		obj->log->save(obj, 6);
@@ -106,7 +106,7 @@ void command_manager::Command::admin_update_func(Command* obj) {
 	obj->seats_base.update();
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::admin_func(std::string& str, Command* obj) {
+void Command::admin_func(std::string& str, Command* obj) {
 	obj->set_function_name("admin_func");
 	if (obj->admin) {
 		obj->log->save("error (admin_func): user already have admin rights");
@@ -123,7 +123,7 @@ void command_manager::Command::admin_func(std::string& str, Command* obj) {
 	}
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj) {
+void Command::admin_add_bus_func(std::string& str, Command* obj) {
 	obj->set_function_name("admin_add_bus_func");
 	if (!obj->admin) {
 		obj->log->save(obj, 6);
@@ -254,7 +254,7 @@ void command_manager::Command::admin_add_bus_func(std::string& str, Command* obj
 	obj->bus_base.update();
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::admin_delete_bus_func(std::string& str, Command* obj) {
+void Command::admin_delete_bus_func(std::string& str, Command* obj) {
 	obj->set_function_name("admin_delete_bus_func");
 	if (!obj->admin) {
 		obj->log->save(obj, 6);
@@ -287,7 +287,7 @@ void command_manager::Command::admin_delete_bus_func(std::string& str, Command* 
 	}
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::leave_admin_func(Command* obj) {
+void Command::leave_admin_func(Command* obj) {
 	obj->set_function_name("leave_admin_func");
 	if (!obj->admin) {
 		obj->log->save(obj, 6);
@@ -297,7 +297,7 @@ void command_manager::Command::leave_admin_func(Command* obj) {
 	clear_func(obj);
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::admin_change_password_func(std::string& str, Command* obj) {
+void Command::admin_change_password_func(std::string& str, Command* obj) {
 	obj->set_function_name("admin_change_password");
 	if (!obj->admin) {
 		obj->log->save(obj, 6);
@@ -309,7 +309,7 @@ void command_manager::Command::admin_change_password_func(std::string& str, Comm
 	obj->log->save(obj, 0);
 }
 
-void command_manager::Command::admin_resize_bus_database_func(std::string& str, Command* obj) {
+void Command::admin_resize_bus_database_func(std::string& str, Command* obj) {
 	obj->set_function_name("admin_resize_bus_database_func");
 	if (!obj->admin) {
 		obj->log->save(obj, 6);
@@ -328,7 +328,7 @@ void command_manager::Command::admin_resize_bus_database_func(std::string& str, 
 
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::admin_resize_client_database_func(std::string& str, Command* obj) {
+void Command::admin_resize_client_database_func(std::string& str, Command* obj) {
 	obj->set_function_name("admin_resize_client_database_func");
 	if (!obj->admin) {
 		obj->log->save(obj, 6);
@@ -347,7 +347,7 @@ void command_manager::Command::admin_resize_client_database_func(std::string& st
 
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::admin_resize_seats_database_func(std::string& str, Command* obj) {
+void Command::admin_resize_seats_database_func(std::string& str, Command* obj) {
 	obj->set_function_name("admin_resize_seats_database_func");
 	if (!obj->admin) {
 		obj->log->save(obj, 6);
@@ -367,7 +367,7 @@ void command_manager::Command::admin_resize_seats_database_func(std::string& str
 	obj->log->save(obj, 0);
 }
 
-void command_manager::Command::show_all_buses_func(Command* obj) {
+void Command::show_all_buses_func(Command* obj) {
 	obj->set_function_name("show_all_buses_func");
 	if (obj->bus_base.size() == 0) {
 		obj->log->save(obj, 4);
@@ -385,7 +385,7 @@ void command_manager::Command::show_all_buses_func(Command* obj) {
 	}
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::show_all_clients_func(Command* obj) {
+void Command::show_all_clients_func(Command* obj) {
 	obj->set_function_name("show_all_clients_func");
 
 	if (obj->client_base.size() == 0) {
@@ -408,7 +408,7 @@ void command_manager::Command::show_all_clients_func(Command* obj) {
 
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::show_all_seats_func(Command* obj) {
+void Command::show_all_seats_func(Command* obj) {
 	obj->set_function_name("show_all_seats_func");
 	if (obj->seats_base.size() == 0) {
 		obj->log->save(obj, 5);
@@ -428,7 +428,7 @@ void command_manager::Command::show_all_seats_func(Command* obj) {
 	}
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::show_all_func(Command* obj) {
+void Command::show_all_func(Command* obj) {
 	obj->set_function_name("show_all_func");
 	show_all_buses_func(obj);
 	std::cout << white"------------------------------------\n";
@@ -438,7 +438,7 @@ void command_manager::Command::show_all_func(Command* obj) {
 	obj->log->save(obj, 0);
 }
 
-void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
+void Command::find_bus_func(std::string& str, Command* obj) {
 	obj->set_function_name("find_bus_func");
 	cleaner(str);
 	std::cout << "\n";
@@ -547,7 +547,7 @@ void command_manager::Command::find_bus_func(std::string& str, Command* obj) {
 	}
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::find_client_func(std::string& str, Command* obj) {
+void Command::find_client_func(std::string& str, Command* obj) {
 	obj->set_function_name("find_client_func");
 	std::cout << std::endl;
 	cleaner(str);
@@ -559,10 +559,16 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 		size = str.find_first_not_of("0123456789");
 
 		if (size != std::string::npos) {
-			std::pair<std::string, std::string> buff_pair;
-			buff_pair.first = str.substr(0, size);
-			buff_pair.second = str.substr(size + 1, std::string::npos);
-			result = obj->client_base.find(buff_pair);
+			size = str.find(".");
+			if (size != std::string::npos) {
+				std::pair<std::string, std::string> buff_pair;
+				buff_pair.first = str.substr(0, size);
+				buff_pair.second = str.substr(size + 1, std::string::npos);
+				result = obj->client_base.find(buff_pair);
+			}
+			else {
+				result = obj->client_base.find(str);
+			}
 		}
 		else {
 			size = str.find_first_not_of("01");
@@ -596,16 +602,25 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 		std::vector<pos_type> result;
 		size = buff_str.find_first_not_of("0123456789");
 		if (size != std::string::npos) {
-			result = obj->client_base.find(buff_str);
+			size = buff_str.find(".");
+			if (size != std::string::npos) {
+				std::pair<std::string, std::string> buff_pair;
+				buff_pair.first = buff_str.substr(0, size);
+				buff_pair.second = buff_str.substr(size + 1, std::string::npos);
+				result = obj->client_base.find(buff_pair);
+			}
+			else {
+				result = obj->client_base.find(str);
+			}
 		}
 		else {
 			size = buff_str.find_first_not_of("01");
 			if (size != std::string::npos) {
-				unsigned int buff_int = std::stoi(str, &size);
+				unsigned int buff_int = std::stoi(buff_str, &size);
 				result = obj->client_base.find(buff_int);
 			}
 			else {
-				bool buff_bool = std::stoi(str, &size);
+				bool buff_bool = std::stoi(buff_str, &size);
 				result = obj->client_base.find(buff_bool);
 			}
 
@@ -627,7 +642,16 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 			}
 			std::size_t buff_size = buff_str.find_first_not_of("0123456789");
 			if (buff_size != std::string::npos) {
-				result = obj->client_base.find(result, buff_str);
+				buff_size = str.find(".");
+				if (buff_size != std::string::npos) {
+					std::pair<std::string, std::string> buff_pair;
+					buff_pair.first = str.substr(0, buff_size);
+					buff_pair.second = str.substr(buff_size + 1, std::string::npos);
+					result = obj->client_base.find(result, buff_pair);
+				}
+				else {
+					result = obj->client_base.find(result, str);
+				}
 			}
 			else {
 				std::size_t buff_size = buff_str.find_first_not_of("01");
@@ -660,7 +684,7 @@ void command_manager::Command::find_client_func(std::string& str, Command* obj) 
 	}
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
+void Command::find_seats_func(std::string& str, Command* obj) {
 	obj->set_function_name("find_seats_func");
 	cleaner(str);
 	std::cout << "\n";
@@ -724,7 +748,7 @@ void command_manager::Command::find_seats_func(std::string& str, Command* obj) {
 	}
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::calculate_func(std::string& str, Command* obj) {
+void Command::calculate_func(std::string& str, Command* obj) {
 	obj->set_function_name("calculate_func");
 	cleaner(str);
 	std::size_t size = str.find(",");
@@ -788,7 +812,7 @@ void command_manager::Command::calculate_func(std::string& str, Command* obj) {
 	obj->log->save(obj, 0);
 }
 
-void command_manager::Command::sort_client_func(std::string& str, Command* obj) {
+void Command::sort_client_func(std::string& str, Command* obj) {
 	obj->set_function_name("sort_client_func");
 
 	if (str == "date") {
@@ -863,7 +887,7 @@ void command_manager::Command::sort_client_func(std::string& str, Command* obj) 
 
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::sort_seats_func(std::string& str, Command* obj) {
+void Command::sort_seats_func(std::string& str, Command* obj) {
 	obj->set_function_name("sort_seats_func");
 
 	if (str == "reset") {
@@ -879,7 +903,7 @@ void command_manager::Command::sort_seats_func(std::string& str, Command* obj) {
 				}
 			}
 		}
-	
+
 	}
 	else if (str == "date") {
 		obj->sort_seats = "date";
@@ -922,7 +946,7 @@ void command_manager::Command::sort_seats_func(std::string& str, Command* obj) {
 
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::sort_bus_func(std::string& str, Command* obj) {
+void Command::sort_bus_func(std::string& str, Command* obj) {
 	obj->set_function_name("sort_bus_func");
 
 	if (str == "bus id") {
@@ -1038,259 +1062,233 @@ void command_manager::Command::sort_bus_func(std::string& str, Command* obj) {
 	obj->log->save(obj, 0);
 }
 
-void command_manager::Command::add_client_func(std::string& str, Command* obj) {
+void Command::add_client_func(std::string& str, Command* obj) {
 	obj->set_function_name("add_client_func");
 	cleaner(str);
 
 	using pair = std::pair<std::string, std::string>;
 	using pair_int = std::pair<int, int>;
+
 	pair buff_time;
 	buff_time.first = std::format("{:%d}", std::chrono::current_zone()->to_local(std::chrono::system_clock::now()));
 	buff_time.second = std::format("{:%m}", std::chrono::current_zone()->to_local(std::chrono::system_clock::now()));
+
 	pair_int buff_clock;
 	std::size_t size = std::string::npos;
 	buff_clock.first = std::stoi(std::format("{:%H}", std::chrono::current_zone()->to_local(std::chrono::system_clock::now())), &size);
 	buff_clock.second = std::stoi(std::format("{:%M}", std::chrono::current_zone()->to_local(std::chrono::system_clock::now())), &size);
 
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	Client client;
-	std::string buff_str = str.substr(0, size);
-	str = str.substr(size + 1, std::string::npos);
-	if (buff_str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
-	client.set_name(buff_str);
+	Amount_handler* first = new Amount_handler;
 
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+	first->set_next(new Missed_value_handler)->set_next(new Amount_handler)->set_next(new Missed_value_handler)
+		->set_next(new Amount_handler)->set_next(new Missed_value_handler)->set_next(new End_handler);
+
+	std::vector<unsigned long long> find_result;
+	bool checked = 0;
+
+	try {
+		if (first->handle(str, obj)) {
+			checked = 1;
+			Abstract_handler::delete_chain(first);
+		}
+		else {
+			obj->log->save("error (add_client_func): unknown error");
+			throw std::runtime_error("\nUnknown error\nPlease, contact the admin");
+		}
 	}
-	buff_str = str.substr(0, size);
-	if (buff_str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
+	catch (std::runtime_error& e) {
+		Abstract_handler::delete_chain(first);
+		throw e;
 	}
 
-	str = str.substr(size + 1, std::string::npos);
-	unsigned int buff_int = std::stoi(buff_str, &size);
-	auto find_result = obj->bus_base.find(buff_int);
-	if (find_result.empty()) {
-		obj->log->save(obj, 4);
-		throw std::runtime_error("\nInvalid bus id");
-	}
-	client.set_bus_id(buff_int);
+	if (checked) {
+		size = str.find(",");
+		std::string client_name = str.substr(0, size);
+		str = str.substr(size + 1, std::string::npos);
 
-	size = str.find(",");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	buff_str = str.substr(0, size);
-	if (buff_str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
+		size = str.find(",");
+		unsigned int client_bus_id = std::stoi(str.substr(0, size));
+		find_result = obj->bus_base.find(client_bus_id);
+		if (find_result.empty()) {
+			obj->log->save(obj, 4);
+			throw std::runtime_error("\nInvalid bus id");
+		}
+		str = str.substr(size + 1, std::string::npos);
 
-	str = str.substr(size + 1, std::string::npos);
-	size = buff_str.find_first_not_of("01");
-	if (size != std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	client.set_benefit(std::stoi(buff_str, &size));
+		size = str.find(",");
+		if (str.substr(0, size).find_first_not_of("01") != std::string::npos) {
+			obj->log->save(obj, 1);
+			throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+		}
+		bool client_benefit = std::stoi(str.substr(0, size));
+		str = str.substr(size + 1, std::string::npos);
 
-	size = str.find(".");
-	if (size == std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	buff_str = str.substr(0, size);
-	if (buff_str.empty()) {
-		obj->log->save(obj, 2);
-		throw std::runtime_error("\nInvalid syntax\nMissed value\nSee 'help' for more information");
-	}
+		size = str.find(".");
+		std::string buff_str = str.substr(0, size);
+		str = str.substr(size + 1, std::string::npos);
+		size = str.find_first_not_of("0123456789");
+		size_t size_2 = buff_str.find_first_not_of("0123456789");
+		if (size != std::string::npos || size_2 != std::string::npos) {
+			obj->log->save(obj, 1);
+			throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+		}
+		size = std::string::npos;
+		if (std::stoi(buff_str, &size) > 31 || std::stoi(str, &size) > 12) {
+			obj->log->save(obj, 1);
+			throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
+		}
 
-	str = str.substr(size + 1, std::string::npos);
-	size = buff_str.find_first_not_of("1234567890");
-	if (size != std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	size = str.find_first_not_of("1234567890");
-	if (size != std::string::npos) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
-	size = std::string::npos;
-	if (std::stoi(buff_str, &size) > 31 || std::stoi(str, &size) > 12) {
-		obj->log->save(obj, 1);
-		throw std::runtime_error("\nInvalid syntax\nSee 'help' for more information");
-	}
+		pair buff_date;
+		buff_date.first = buff_str;
+		buff_date.second = str;
 
-	client.set_date(buff_str, str);
+		Client client{ client_name, client_bus_id, client_benefit, buff_date };
+		client.generate_ticket(7);
 
-	client.generate_ticket(5);
+		std::vector<pos_type> buff_find_result;
 
-	pair buff_date;
-	buff_date.first = buff_str;
-	buff_date.second = str;
+		auto result = obj->bus_base.find(client_bus_id);
+		Bus buff;
+		if (!result.empty())
+			buff = obj->bus_base.get(result.at(0));
 
-	std::vector<pos_type> buff_find_result;
-	bool benefit = client.get_benefit();
-
-	auto result = obj->bus_base.find(buff_int);
-	Bus buff;
-	if (!result.empty())
-		buff = obj->bus_base.get(result.at(0));
-
-	result = obj->seats_base.find(buff_int);
-	if (!result.empty()) {
-		result = obj->seats_base.find(result, buff_date);
+		result = obj->seats_base.find(client_bus_id);
 		if (!result.empty()) {
-			Seats seats_buff = obj->seats_base.get(result.at(0));
-			if (!benefit) {
-				if (unsigned int(seats_buff.get_size()) >= buff.get_max_seats() - buff.get_max_benefit_seats()) {
-					obj->log->save("error (add_client_func): no non-benefit seats available");
-					throw std::runtime_error("\nAll non-benefit seats has been booked");
+			result = obj->seats_base.find(result, buff_date);
+			if (!result.empty()) {
+				Seats seats_buff = obj->seats_base.get(result.at(0));
+				if (!client_benefit) {
+					if (unsigned int(seats_buff.get_size()) >= buff.get_max_seats() - buff.get_max_benefit_seats()) {
+						obj->log->save("error (add_client_func): no non-benefit seats available");
+						throw std::runtime_error("\nAll non-benefit seats has been booked");
+					}
 				}
-			}
-			else {
-				if (unsigned int(seats_buff.get_size()) >= buff.get_max_seats()) {
-					obj->log->save("error (add_client_func): no seats available");
-					throw std::runtime_error("\nAll seats has been booked");
+				else {
+					if (unsigned int(seats_buff.get_size()) >= buff.get_max_seats()) {
+						obj->log->save("error (add_client_func): no seats available");
+						throw std::runtime_error("\nAll seats has been booked");
+					}
 				}
 			}
 		}
-	}
 
-	if (benefit) {
-		bool checked = 0;
-		buff_find_result = obj->client_base.find(buff_int);
-		if (!buff_find_result.empty()) {
-			buff_find_result = obj->client_base.find(buff_find_result, buff_date);
+		if (client_benefit) {
+			bool checked = 0;
+			buff_find_result = obj->client_base.find(client_bus_id);
 			if (!buff_find_result.empty()) {
-				buff_find_result = obj->client_base.find(buff_find_result, benefit);
-				checked = 1;
-			}
-		}
-		if (buff_find_result.size() >= buff.get_max_benefit_seats() && checked == 1) {
-			obj->log->save("error (add_client_func): no benefit seats available");
-			throw std::runtime_error("\nAll benefit seats had been taken");
-		}
-
-	}
-
-	buff_str = client.get_name();
-	buff_find_result = obj->client_base.find(buff_str);
-	if (buff_find_result.empty()) {
-		pair_int buff_pair;
-		buff_pair.first = std::stoi(obj->bus_base.get(find_result.at(0)).get_departure(0), &size);
-		buff_pair.second = std::stoi(obj->bus_base.get(find_result.at(0)).get_departure(1), &size);
-		bool executed = 0;
-
-		pair_int buff_client_time;
-		buff_client_time.first = std::stoi(client.get_date().first);
-		buff_client_time.second = std::stoi(client.get_date().second);
-
-		pair_int buff_int_time;
-		buff_int_time.first = std::stoi(buff_time.first);
-		buff_int_time.second = std::stoi(buff_time.second);
-
-		if (buff_client_time == buff_int_time) {
-			if (buff_clock.first <= buff_pair.first) {
-				bool checked = 0;
-				if (buff_pair.first != buff_clock.first)
+				buff_find_result = obj->client_base.find(buff_find_result, buff_date);
+				if (!buff_find_result.empty()) {
+					buff_find_result = obj->client_base.find(buff_find_result, client_benefit);
 					checked = 1;
-				if (buff_clock.second < buff_pair.second || checked == 1) {
+				}
+			}
+			if (buff_find_result.size() >= buff.get_max_benefit_seats() && checked == 1) {
+				obj->log->save("error (add_client_func): no benefit seats available");
+				throw std::runtime_error("\nAll benefit seats had been taken");
+			}
 
-					obj->client_base.put(obj->client_base.size() + 1, client);
-					obj->bus_base.get_ptr(find_result.at(0))->add_client(client.get_benefit());
+		}
 
-					find_result = obj->seats_base.find(buff_int);
+		buff_find_result = obj->client_base.find(client_name);
+		if (buff_find_result.empty()) {
+			pair_int buff_pair;
+			buff_pair.first = std::stoi(obj->bus_base.get(find_result.at(0)).get_departure(0), &size);
+			buff_pair.second = std::stoi(obj->bus_base.get(find_result.at(0)).get_departure(1), &size);
+			bool executed = 0;
 
-					if (!find_result.empty()) {
-						pair buff = client.get_date();
-						find_result = obj->seats_base.find(find_result, buff);
-						if (find_result.empty()) {
+			pair_int buff_client_time;
+			buff_client_time.first = std::stoi(client.get_date().first);
+			buff_client_time.second = std::stoi(client.get_date().second);
+
+			pair_int buff_int_time;
+			buff_int_time.first = std::stoi(buff_time.first);
+			buff_int_time.second = std::stoi(buff_time.second);
+
+			if (buff_client_time == buff_int_time) {
+				if (buff_clock.first <= buff_pair.first) {
+					bool checked = 0;
+					if (buff_pair.first != buff_clock.first)
+						checked = 1;
+					if (buff_clock.second < buff_pair.second || checked == 1) {
+
+						obj->client_base.put(obj->client_base.size() + 1, client);
+						obj->bus_base.get_ptr(find_result.at(0))->add_client(client.get_benefit());
+
+						find_result = obj->seats_base.find(client_bus_id);
+
+						if (!find_result.empty()) {
+							pair buff = client.get_date();
+							find_result = obj->seats_base.find(find_result, buff);
+							if (find_result.empty()) {
+								Seats seats;
+								seats.set_id(client.get_bus_id());
+								seats.put(client.get_ticket());
+								seats.set_date(client.get_date().first, client.get_date().second);
+								obj->seats_base.put(obj->client_base.size() + 1, seats);
+							}
+							else {
+								Seats seats = obj->seats_base.get(find_result.at(0));
+								seats.put(client.get_ticket());
+								obj->seats_base.put(find_result.at(0), seats);
+							}
+						}
+						else {
 							Seats seats;
 							seats.set_id(client.get_bus_id());
 							seats.put(client.get_ticket());
 							seats.set_date(client.get_date().first, client.get_date().second);
 							obj->seats_base.put(obj->client_base.size() + 1, seats);
 						}
-						else {
-							Seats seats = obj->seats_base.get(find_result.at(0));
-							seats.put(client.get_ticket());
-							obj->seats_base.put(find_result.at(0), seats);
-						}
+						executed = 1;
 					}
 					else {
-						Seats seats;
-						seats.set_id(client.get_bus_id());
-						seats.put(client.get_ticket());
-						seats.set_date(client.get_date().first, client.get_date().second);
-						obj->seats_base.put(obj->client_base.size() + 1, seats);
+						obj->log->save("error (add_client_func): bus already departured");
+						throw std::runtime_error("\nBus has already departured");
 					}
-					executed = 1;
 				}
 				else {
 					obj->log->save("error (add_client_func): bus already departured");
 					throw std::runtime_error("\nBus has already departured");
 				}
 			}
-			else {
-				obj->log->save("error (add_client_func): bus already departured");
-				throw std::runtime_error("\nBus has already departured");
-			}
-		}
-		else {
-			std::cout << "\nHelp\n";
-		}
 
-		if (!executed) {
-			obj->client_base.put(obj->client_base.size() + 1, client);
-			find_result = obj->seats_base.find(buff_int);
+			if (!executed) {
+				obj->client_base.put(obj->client_base.size() + 1, client);
+				find_result = obj->seats_base.find(client_bus_id);
 
-			if (!find_result.empty()) {
-				pair buff = client.get_date();
-				find_result = obj->seats_base.find(find_result, buff);
-				if (find_result.empty()) {
+				if (!find_result.empty()) {
+					pair buff = client.get_date();
+					find_result = obj->seats_base.find(find_result, buff);
+					if (find_result.empty()) {
+						Seats seats;
+						seats.set_id(client.get_bus_id());
+						seats.put(client.get_ticket());
+						seats.set_date(client.get_date().first, client.get_date().second);
+						obj->seats_base.put(obj->client_base.size() + 1, seats);
+					}
+					else {
+						Seats seats = obj->seats_base.get(find_result.at(0));
+						seats.put(client.get_ticket());
+						obj->seats_base.put(find_result.at(0), seats);
+					}
+				}
+				else {
 					Seats seats;
 					seats.set_id(client.get_bus_id());
 					seats.put(client.get_ticket());
 					seats.set_date(client.get_date().first, client.get_date().second);
 					obj->seats_base.put(obj->client_base.size() + 1, seats);
 				}
-				else {
-					Seats seats = obj->seats_base.get(find_result.at(0));
-					seats.put(client.get_ticket());
-					obj->seats_base.put(find_result.at(0), seats);
-				}
-			}
-			else {
-				Seats seats;
-				seats.set_id(client.get_bus_id());
-				seats.put(client.get_ticket());
-				seats.set_date(client.get_date().first, client.get_date().second);
-				obj->seats_base.put(obj->client_base.size() + 1, seats);
 			}
 		}
+		else {
+			obj->log->save("error (add_client_func): client with that name was found");
+			throw std::runtime_error("\nClient with that name is already in database");
+		}
 	}
-	else {
-		obj->log->save("error (add_client_func): client with that name was found");
-		throw std::runtime_error("\nClient with that name is already in database");
-	}
-
-	std::cout << "\nClient`s ticket: " << client.get_ticket() << "\n";
 	obj->log->save(obj, 0);
 }
-void command_manager::Command::delete_client_func(std::string& str, Command* obj) {
+void Command::delete_client_func(std::string& str, Command* obj) {
 	obj->set_function_name("delete_client_func");
 	cleaner(str);
 
@@ -1320,7 +1318,7 @@ void command_manager::Command::delete_client_func(std::string& str, Command* obj
 	obj->log->save(obj, 0);
 }
 
-void command_manager::Command::time_checker(Command* obj) {
+void Command::time_checker(Command* obj) {
 	while (!obj->end()) {
 		pair_int buff_time;
 		std::mutex mutex;
@@ -1375,7 +1373,7 @@ void command_manager::Command::time_checker(Command* obj) {
 		std::this_thread::sleep_for(std::chrono::minutes(1));
 	}
 }
-void command_manager::Command::updater(Command* obj) {
+void Command::updater(Command* obj) {
 	while (!obj->end()) {
 		pair buff_time;
 		std::mutex mutex;
@@ -1426,7 +1424,7 @@ void command_manager::Command::updater(Command* obj) {
 
 }
 
-command_manager::Command::Command() {
+Command::Command() {
 	log = Log::create();
 	if (admin_config.get_capacity() == 0) {
 		admin_config.put(0, Admin_config{});
@@ -1470,9 +1468,9 @@ command_manager::Command::Command() {
 	thr_upd.detach();
 }
 
-command_manager::Command::~Command() = default;
+Command::~Command() = default;
 
-const void command_manager::Command::operator>>(std::string& str) {
+const void Command::operator>>(std::string& str) {
 	log->save("user input: " + str);
 	std::size_t size = str.find("(");
 	bool executed = 0;
@@ -1526,7 +1524,7 @@ const void command_manager::Command::operator>>(std::string& str) {
 
 }
 
-const std::string command_manager::Command::get_message(const unsigned int msg) const {
+const std::string Command::get_message(const unsigned int msg) const {
 	switch (msg) {
 	case 0:
 		return "success";
@@ -1549,4 +1547,4 @@ const std::string command_manager::Command::get_message(const unsigned int msg) 
 	}
 }
 
-bool command_manager::Command::end() const { return this->exit; }
+bool Command::end() const { return this->exit; }

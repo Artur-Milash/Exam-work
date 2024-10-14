@@ -18,6 +18,7 @@ public:
 	Seats();
 	Seats(unsigned int id);
 	~Seats();
+	Seats(const Seats&);
 
 	void set_id(unsigned int& value);
 	void set_id(unsigned int&& value);

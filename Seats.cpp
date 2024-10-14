@@ -3,6 +3,7 @@
 Seats::Seats() : Seats(0) {}
 Seats::Seats(unsigned int id) : bus_id{ id } {}
 Seats::~Seats() {};
+Seats::Seats(const Seats& obj) :clients{ obj.clients }, bus_id{ obj.bus_id }, date{obj.date} {}
 
 void Seats::set_id(unsigned int& value) { bus_id = value; }
 void Seats::set_id(unsigned int&& value) { bus_id = value; }
