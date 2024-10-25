@@ -75,8 +75,6 @@ private:
 
 	const std::string get_message(const unsigned int) const override;
 
-	//add copy and move constructors
-
 	std::unordered_map<std::string, void(*)(Command*)> map;
 	std::unordered_map<std::string, void(*)(std::string&, Command*)> map_variables;
 

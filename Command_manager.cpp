@@ -354,6 +354,9 @@ void Command::show_all_buses_func(Command* obj) {
 		Bus buff = obj->bus_base.get(i);
 		std::cout << buff;
 	}
+
+	obj->sort_bus = "";
+
 	obj->log->save(obj, 0);
 }
 void Command::show_all_clients_func(Command* obj) {
@@ -377,6 +380,8 @@ void Command::show_all_clients_func(Command* obj) {
 		pos++;
 	}
 
+	obj->sort_client = "";
+
 	obj->log->save(obj, 0);
 }
 void Command::show_all_seats_func(Command* obj) {
@@ -397,6 +402,9 @@ void Command::show_all_seats_func(Command* obj) {
 		std::cout << seat_buff;
 		pos++;
 	}
+
+	obj->sort_seats = "";
+
 	obj->log->save(obj, 0);
 }
 void Command::show_all_func(Command* obj) {
@@ -848,7 +856,7 @@ void Command::sort_client_func(std::string& str, Command* obj) {
 		obj->log->save(obj, 7);
 		throw std::runtime_error("\nInvalid sorting key\nSee 'help' for more information");
 	}
-
+	obj->show_all_clients_func(obj);
 	obj->log->save(obj, 0);
 }
 void Command::sort_seats_func(std::string& str, Command* obj) {
@@ -908,6 +916,7 @@ void Command::sort_seats_func(std::string& str, Command* obj) {
 		throw std::runtime_error("\nInvalid sorting key\nSee 'help' for more information");
 	}
 
+	obj->show_all_seats_func(obj);
 	obj->log->save(obj, 0);
 }
 void Command::sort_bus_func(std::string& str, Command* obj) {
@@ -1023,6 +1032,7 @@ void Command::sort_bus_func(std::string& str, Command* obj) {
 		throw std::runtime_error("\nInvalid sorting key\nSee 'help' for more information");
 	}
 
+	obj->show_all_buses_func(obj);
 	obj->log->save(obj, 0);
 }
 
