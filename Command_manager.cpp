@@ -178,7 +178,7 @@ void Command::admin_add_bus_func(std::string& str, Command* obj) {
 		size = str.find(":");
 		if (size == std::string::npos) {
 			obj->log->save(obj, 1);
-			throw std::runtime_error("\nInvalid syntax\nInvalid departure syntax\nSee 'help' for more information");
+			throw std::runtime_error("\nInvalid syntax\nInvalid arrival syntax\nSee 'help' for more information");
 		}
 		bus_arrival.first = str.substr(0, size);
 		str = str.substr(size + 1, std::string::npos);
@@ -189,7 +189,7 @@ void Command::admin_add_bus_func(std::string& str, Command* obj) {
 
 		if (std::stoi(bus_arrival.first, 0) >= 24 || std::stoi(bus_arrival.second, 0) >= 60) {
 			obj->log->save(obj, 2);
-			throw std::runtime_error("\nInvalid syntax\nInvalid departure value\nSee 'help' for more information");
+			throw std::runtime_error("\nInvalid syntax\nInvalid arrival value\nSee 'help' for more information");
 		}
 
 		size = str.find(",");
